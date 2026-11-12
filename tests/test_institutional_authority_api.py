@@ -210,6 +210,18 @@ class InstitutionalAuthorityAPITests(unittest.TestCase):
             validate_certificate_policy(revoked_cert, [], self.ca_file,
                 crl_bundle=revoked_crl, policy_oid="1.2.3.4.5", revocation="crl")
 
+
+    def test_missing_rollback_anchor_fails_closed(self):
+        store = AuthorityStore(self.db)
+        _, cert, key = self.clients[0]
+        auth = create_single_use_authorization(cert, key, outpoint="missing-anchor:0",
+            operation="APPROVE", resource_id="missing-anchor",
+            expires_at=int(time.time())+600, nonce="missing-anchor")
+        store.consume(auth, cert, "LEGISLATIVE_ASSEMBLY")
+        store.anchor_path.unlink()
+        with self.assertRaisesRegex(RuntimeError, "Rollback anchor missing"):
+            AuthorityStore(self.db)
+
     def test_untrusted_client_ca_is_not_accepted_by_tls(self):
         import ssl
         ctx = ssl.create_default_context()
