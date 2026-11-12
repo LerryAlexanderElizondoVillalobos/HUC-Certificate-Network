@@ -1,0 +1,125 @@
+name: HUC 0.8.0 Multi-Platform Validation
+
+on:
+  push:
+    branches: [main, validation/huc-0.8.0-multiplatform]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: huc-multiplatform-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core-matrix:
+    name: Core — ${{ matrix.os }} / Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install HUC and test runner
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e . pytest
+      - name: Compile HUC source
+        run: python -m compileall -q huc.py huc_bft.py huc_bft_peer.py huc_federation.py huc_membership.py huc_peer.py huc_replicated.py huc_view.py
+      - name: Run portable core tests (cluster test is Linux-only)
+        run: python -m pytest -q tests --ignore=tests/test_bft_process_cluster.py --junitxml=core-results.xml
+      - name: Upload core test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: huc-core-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: core-results.xml
+          if-no-files-found: warn
+
+  direct-sdk-matrix:
+    name: Direct SDK — ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/python/pyproject.toml
+      - name: Install Direct SDK with API and test extras
+        working-directory: sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/python
+        run: python -m pip install -e ".[api,test]"
+      - name: Run Direct SDK tests
+        working-directory: sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0
+        run: python -m pytest -q tests --junitxml=direct-sdk-results.xml
+      - name: Upload Direct SDK test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: huc-direct-sdk-${{ matrix.os }}
+          path: sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/direct-sdk-results.xml
+          if-no-files-found: warn
+
+  android-sdk-build:
+    name: Android SDK — Gradle compile
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+      - name: Install Android Platform 35 and Build Tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDKMANAGER="$(command -v sdkmanager)"
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" --install "platforms;android-35" "build-tools;35.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+      - name: Compile HUC Android library and sample app
+        working-directory: sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android
+        run: gradle --no-daemon :huc-direct:assembleDebug :sample:assembleDebug
+      - name: Upload Android build outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: huc-android-sdk-build
+          path: |
+            sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android/huc-direct/build/outputs/aar/*.aar
+            sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android/sample/build/outputs/apk/debug/*.apk
+          if-no-files-found: warn
+
+  four-process-tls:
+    name: Four-process TLS cluster (Linux)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install HUC dependencies
+        run: python -m pip install -e .
+      - name: Run four-process TLS cluster
+        run: python -m unittest tests.test_bft_process_cluster -v
