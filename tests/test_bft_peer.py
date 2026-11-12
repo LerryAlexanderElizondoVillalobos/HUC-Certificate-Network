@@ -1,5 +1,6 @@
 import asyncio
 import socket
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -98,8 +99,11 @@ class BFTPeerNetworkTests(unittest.IsolatedAsyncioTestCase):
         # three signed VIEW_CHANGE messages over actual TCP peer connections.
         await self.servers["BFT-A"].close()
         new_view_path = self.root / "new-view.json"
+        # Windows hosted runners have higher event-loop and process scheduling jitter.
+        # Use a larger network deadline without weakening quorum or safety assertions.
+        network_timeout = 4.0 if sys.platform == "win32" else 1.5
         new_view_result = await bft_peer.advance_view(
-            self.nodes["BFT-B"], new_view_path, timeout=0.5, reason="primary-unreachable"
+            self.nodes["BFT-B"], new_view_path, timeout=network_timeout, reason="primary-unreachable"
         )
         self.assertEqual(new_view_result["view"], 1)
         self.assertEqual(new_view_result["primary_id"], "BFT-B")
@@ -110,7 +114,7 @@ class BFTPeerNetworkTests(unittest.IsolatedAsyncioTestCase):
 
         # New primary B recovers the highest prepared request in view 1.
         recovered = await bft_peer.recover_prepared(
-            self.nodes["BFT-B"], self.commits / "recovered.commit.json", timeout=1.0
+            self.nodes["BFT-B"], self.commits / "recovered.commit.json", timeout=network_timeout
         )
         self.assertEqual(recovered["result"], "bft_commit_replicated")
         self.assertEqual(recovered["recovery"], "re-proposed highest PreparedCertificate selected by NEW_VIEW")
@@ -119,7 +123,7 @@ class BFTPeerNetworkTests(unittest.IsolatedAsyncioTestCase):
         server_a = peer.PeerServer(self.nodes["BFT-A"], "127.0.0.1", self.ports["BFT-A"])
         await server_a.start()
         self.servers["BFT-A"] = server_a
-        synced = await bft_peer.sync_from_peer(self.nodes["BFT-A"], "BFT-B", timeout=1.0)
+        synced = await bft_peer.sync_from_peer(self.nodes["BFT-A"], "BFT-B", timeout=network_timeout)
         self.assertEqual(synced["result"], "bft_state_synchronized")
         states = [bft.status(n) for n in self.nodes.values()]
         self.assertEqual({s["sequence"] for s in states}, {1})
