@@ -23,8 +23,10 @@ jobs:
           python-version: "3.13"
       - name: Install pip-audit
         run: python -m pip install --upgrade pip pip-audit
-      - name: Audit runtime dependencies
+      - name: Audit HUC core dependencies
         run: pip-audit -r requirements.txt
+      - name: Audit HUC Direct SDK dependencies
+        run: pip-audit -r sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/requirements.txt
 
   private-key-pattern-check:
     runs-on: ubuntu-latest
