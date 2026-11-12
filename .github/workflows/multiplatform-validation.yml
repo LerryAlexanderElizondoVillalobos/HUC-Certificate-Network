@@ -183,7 +183,10 @@ jobs:
           java-version: "17"
       - uses: android-actions/setup-android@v3
         with:
-          packages: platform-tools
+          packages: |
+            platform-tools
+            emulator
+            "system-images;android-35;google_apis;x86_64"
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.9"
@@ -194,8 +197,37 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: pixel_6
+          force-avd-creation: true
+          emulator-boot-timeout: 600
           disable-animations: true
-          script: cd sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android && gradle --no-daemon :huc-direct:connectedDebugAndroidTest
+          emulator-options: >-
+            -no-window
+            -no-audio
+            -no-boot-anim
+            -no-snapshot
+            -wipe-data
+            -gpu swiftshader_indirect
+          script: |
+            adb wait-for-device
+            adb shell getprop sys.boot_completed | grep -q 1
+            cd sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android
+            gradle --no-daemon :huc-direct:connectedDebugAndroidTest
+      - name: Capture emulator diagnostics
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p android-emulator-diagnostics
+          adb devices -l > android-emulator-diagnostics/adb-devices.txt 2>&1 || true
+          adb -s emulator-5554 shell getprop > android-emulator-diagnostics/getprop.txt 2>&1 || true
+          adb -s emulator-5554 logcat -d -t 5000 > android-emulator-diagnostics/logcat.txt 2>&1 || true
+          ps -ef | grep -E '[e]mulator|[q]emu' > android-emulator-diagnostics/processes.txt 2>&1 || true
+      - name: Upload emulator diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: huc-android-emulator-diagnostics
+          path: android-emulator-diagnostics/
+          if-no-files-found: warn
       - name: Upload Android instrumentation reports
         if: always()
         uses: actions/upload-artifact@v4
