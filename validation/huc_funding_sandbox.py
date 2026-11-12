@@ -188,8 +188,7 @@ class FundingSandbox:
             "event_chain_valid": self.verify_event_chain(events),
         }
 
-    @staticmethod
-    def verify_event_chain(events: list[dict[str, Any]] | None = None) -> bool:
+    def verify_event_chain(self, events: list[dict[str, Any]] | None = None) -> bool:
         """Verify a supplied exported chain, or this sandbox's stored chain."""
         if events is None:
             events = self._events
