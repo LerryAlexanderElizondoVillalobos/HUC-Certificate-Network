@@ -1,5 +1,7 @@
 import json
 import tempfile
+import shutil
+import sqlite3
 import threading
 import time
 import unittest
@@ -154,6 +156,28 @@ class InstitutionalAuthorityAPITests(unittest.TestCase):
         self.assertEqual(persisted["event_head_hash"], evidence["event_head_hash"])
         with self.assertRaises(ValueError):
             reopened.consume(auth, cert, name)
+
+
+    def test_database_rollback_is_detected_by_monotonic_anchor(self):
+        store = AuthorityStore(self.db)
+        _, cert, key = self.clients[0]
+        first = create_single_use_authorization(cert, key, outpoint="rollback-a:0",
+            operation="APPROVE", resource_id="rollback-a",
+            expires_at=int(time.time())+600, nonce="rollback-a")
+        store.consume(first, cert, "LEGISLATIVE_ASSEMBLY")
+        with sqlite3.connect(self.db) as db:
+            db.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+        snapshot = self.root/"old-authority.sqlite3"
+        shutil.copy2(self.db, snapshot)
+        second = create_single_use_authorization(cert, key, outpoint="rollback-b:0",
+            operation="APPROVE", resource_id="rollback-b",
+            expires_at=int(time.time())+600, nonce="rollback-b")
+        store.consume(second, cert, "LEGISLATIVE_ASSEMBLY")
+        with sqlite3.connect(self.db) as db:
+            db.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+        shutil.copy2(snapshot, self.db)
+        with self.assertRaisesRegex(RuntimeError, "rollback detected"):
+            AuthorityStore(self.db)
 
     def test_untrusted_client_ca_is_not_accepted_by_tls(self):
         import ssl
