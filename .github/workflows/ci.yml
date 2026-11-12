@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
+          python -m pip install -e .
       - name: Compile source
         run: python -m compileall -q huc.py huc_bft.py huc_bft_peer.py huc_federation.py huc_membership.py huc_peer.py huc_replicated.py huc_view.py
       - name: Run complete test suite
