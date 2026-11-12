@@ -53,7 +53,9 @@ python -m unittest tests.test_bft_process_cluster -v
 - `huc_view.py`: view-change and recovery data structures.
 - `tests/`: automated unit, adversarial, network and cluster tests.
 - `demo/`: public demonstration fixtures and verification scripts.
-- `docs/`: protocol, architecture, security and physical-device procedures.
+- `docs/`: protocol, architecture, certificate, security and physical-device procedures.
+- `sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/`: Python and Android application SDK.
+- `sdk/demo/`: public Direct SDK credential and challenge-response fixtures.
 - `.github/workflows/`: CI, security and integration automation.
 
 ## Security boundaries
