@@ -1,0 +1,9 @@
+{
+  "approved_at_utc": "2026-11-12T02:39:11Z",
+  "authority_id": "INSTITUTION-C",
+  "consensus_certificate_signature": "pgwa6Ds6aDIXOJgIbhrD0VfX+C7t8h7qyyyBNQahTW4Og+BLi56310Mika7KYJKnb0v3yKNW/jN2lR7NuyvnCg==",
+  "proposal_id": "046821f1daca330b2538c70fcfb6d685a9ad02d8616dfc48965d0e1a8b8debd1",
+  "proposal_signature": "87j4GLc1vzRhvLziwVJdeKo2BewTtm4uC39AmhzbmgCvaBrrM1+QxKqCKoBWmgCtC6pXbQ/ZG9mCoZwPJ+IjAA==",
+  "schema": "LAEV-HUC-DISTRIBUTED-APPROVAL-1",
+  "transition_signature": "QGY1WnH2xJV3LE/iI6wSZf/AxIiXj6P6+kt9nqBq1Mu0JRBwUhvwcgMkKzi7cRzufXgRBshJpTnOFwrkgQUqCA=="
+}

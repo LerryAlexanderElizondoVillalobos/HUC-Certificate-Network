@@ -1,0 +1,50 @@
+{
+  "HUC-B": {
+    "active_certificates": 0,
+    "certificate_count": 2,
+    "fault_tolerance": 1,
+    "head_hash": "f205a1d270ab5f061db5e039707187aeea620a06453c46570ea3ecee226e2520",
+    "network_id": "062d9a7964413e7fab464e15f361e2c7f599633d73c8db3530653e34528477c8",
+    "quorum": 3,
+    "replicated_commit_count": 3,
+    "sequence": 3,
+    "validator_count": 4,
+    "validator_id": "HUC-B"
+  },
+  "HUC-C": {
+    "active_certificates": 0,
+    "certificate_count": 2,
+    "fault_tolerance": 1,
+    "head_hash": "f205a1d270ab5f061db5e039707187aeea620a06453c46570ea3ecee226e2520",
+    "network_id": "062d9a7964413e7fab464e15f361e2c7f599633d73c8db3530653e34528477c8",
+    "quorum": 3,
+    "replicated_commit_count": 3,
+    "sequence": 3,
+    "validator_count": 4,
+    "validator_id": "HUC-C"
+  },
+  "HUC-D": {
+    "active_certificates": 0,
+    "certificate_count": 2,
+    "fault_tolerance": 1,
+    "head_hash": "f205a1d270ab5f061db5e039707187aeea620a06453c46570ea3ecee226e2520",
+    "network_id": "062d9a7964413e7fab464e15f361e2c7f599633d73c8db3530653e34528477c8",
+    "quorum": 3,
+    "replicated_commit_count": 3,
+    "sequence": 3,
+    "validator_count": 4,
+    "validator_id": "HUC-D"
+  },
+  "HUC-E": {
+    "active_certificates": 0,
+    "certificate_count": 2,
+    "fault_tolerance": 1,
+    "head_hash": "f205a1d270ab5f061db5e039707187aeea620a06453c46570ea3ecee226e2520",
+    "network_id": "062d9a7964413e7fab464e15f361e2c7f599633d73c8db3530653e34528477c8",
+    "quorum": 3,
+    "replicated_commit_count": 3,
+    "sequence": 3,
+    "validator_count": 4,
+    "validator_id": "HUC-E"
+  }
+}

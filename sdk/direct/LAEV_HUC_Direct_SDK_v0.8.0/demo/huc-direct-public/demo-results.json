@@ -1,0 +1,33 @@
+{
+  "sdk_version": "0.8.0",
+  "nodes_required": false,
+  "blockchain_required": false,
+  "optional_direct_exchange": true,
+  "trust_anchor_sha256": "93373414c867f28eabf7fe942a5e122ebd1aff192c2e3e16f8dd57721dfbd55d",
+  "issuance": {
+    "result": "VALID",
+    "status": "ACTIVE"
+  },
+  "direct_exchange": {
+    "result": "VALID",
+    "holder_proof_of_possession": true
+  },
+  "renewal": {
+    "new_result": "VALID",
+    "old_result": "INVALID",
+    "old_status": "SUPERSEDED"
+  },
+  "revocation": {
+    "result": "INVALID",
+    "status": "REVOKED"
+  },
+  "checks": {
+    "offline_active_package_valid": true,
+    "direct_holder_proof_valid": true,
+    "renewed_package_valid": true,
+    "old_package_superseded": true,
+    "revoked_package_invalid": true,
+    "private_keys_excluded_from_demo": true
+  },
+  "note": "Direct challenge/response is a time-limited sample. It expires after 300 seconds; use fresh challenges for actual testing."
+}

@@ -1,0 +1,11 @@
+{
+  "payload": {
+    "schema": "LAEV-HUC-DIRECT-CHALLENGE-1",
+    "certificate_sha256_der": "97d1effb27206909fd1abb81c26820b690382aa98e879b9bd77c42a5d342a6ff",
+    "audience": "demo.education.example",
+    "nonce": "318d9e65ad6b953ad9f7f1501f63d1e628339d42ed735cd969fd0609b8cee448",
+    "created_at_utc": "2026-11-12T03:56:23Z",
+    "expires_at_utc": "2026-11-12T04:01:23Z"
+  },
+  "challenge_id": "e1266a6e0d8042e20186b20ef13bce644651519bac2d388f99f6c2aad8f038b7"
+}

@@ -1,8 +1,8 @@
-name: HUC CI
+name: HUC 0.8.0 CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, integration/huc-0.8.0]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -10,21 +10,75 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: huc-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  test:
-    name: Unit tests and lint
+  unit-and-integration:
+    name: Python ${{ matrix.python-version }} test suite
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
           cache: pip
-      - name: Install project and development tools
+          cache-dependency-path: requirements.txt
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e ".[dev]"
-      - name: Run unit tests
+          python -m pip install -e .
+      - name: Compile source
+        run: python -m compileall -q huc.py huc_bft.py huc_bft_peer.py huc_federation.py huc_membership.py huc_peer.py huc_replicated.py huc_view.py
+      - name: Run complete test suite
         run: python -m unittest discover -s tests -v
-      - name: Run Ruff
-        run: ruff check src tests
+
+  tls-four-process-cluster:
+    name: Four-process TLS cluster
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Run four-process TLS test
+        run: python -m unittest tests.test_bft_process_cluster -v
+
+  direct-sdk-python:
+    name: HUC Direct SDK Python tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install SDK with API and test extras
+        working-directory: sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/python
+        run: python -m pip install -e ".[api,test]"
+      - name: Run SDK tests
+        working-directory: sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/python
+        run: python -m pytest -q ../tests
+
+  public-demo-verification:
+    name: Public certificate lifecycle fixtures
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install HUC dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Verify active, renewed, superseded and revoked bundles
+        run: bash demo/verify_demos.sh

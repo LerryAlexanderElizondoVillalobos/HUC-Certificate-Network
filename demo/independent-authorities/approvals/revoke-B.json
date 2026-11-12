@@ -1,0 +1,9 @@
+{
+  "approved_at_utc": "2026-11-12T02:39:11Z",
+  "authority_id": "INSTITUTION-B",
+  "consensus_certificate_signature": null,
+  "proposal_id": "905693206624f8a83bf8e07c4ba390d8a3de007158f7d2ff43d360725b74bb05",
+  "proposal_signature": "7ALHGKAdMWT5n2Cp7DXYYGEaDp9izFY6EaYVGcb1JvJyZLFAt5cseZKdoM6/Jlp9bSvvSmh7cESjSIHJMbK1DA==",
+  "schema": "LAEV-HUC-DISTRIBUTED-APPROVAL-1",
+  "transition_signature": "PjxPVPWmLNso3rh9uty0T6++6J27alSeFl9kpTW5Epjy+dcT38A+B70IGufb2KaWEg8jTP8MIXC3aE6qlSjwDw=="
+}

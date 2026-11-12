@@ -1,0 +1,24 @@
+LAEV HUC 0.6.0 — Automated verification
+
+Command:
+  python -m unittest discover -s tests -v
+
+Result:
+  38 tests passed
+  0 failures
+  0 errors
+
+Coverage includes:
+  - X.509 and HUC-CC issuance, binding and signature validation
+  - Independent validator keys and approvals from previous version
+  - 4-validator / 3-of-4 replicated state protocol
+  - Any-node proposal and commit assembly
+  - One-offline-node progress and peer state synchronization
+  - Persistent anti-equivocation locks
+  - Conflicting 2/2 proposals do not reach quorum
+  - ISSUE / RENEW / REVOKE replication
+  - Invalid evidence, invalid signatures, rollback and forks rejected
+  - All four demo replicas end with an identical sequence and state head
+
+The demo keys are generated inside a temporary directory and removed after execution.
+The public demo files contain no private keys.

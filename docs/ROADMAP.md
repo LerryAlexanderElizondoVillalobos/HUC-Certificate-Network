@@ -1,35 +1,27 @@
 # HUC Roadmap
 
-## Milestone 0 — Reference prototype
-- [x] Ed25519 certificate signatures
-- [x] Deterministic certificate identifiers
-- [x] In-memory UTXO-inspired state
-- [x] Revocation by consuming active output
-- [x] Unit tests and GitHub Actions
+## Current baseline — 0.8.0 experimental reference
+- [x] X.509 credential lifecycle: issue, renew and revoke
+- [x] HUC-CC signed authorization evidence
+- [x] Logical UTXO state and hash-linked history
+- [x] Independent authority approval and membership workflow
+- [x] BFT-inspired prepare, prepared locks, commit and quorum certificates
+- [x] View change, prepared recovery and state synchronization
+- [x] TCP/TLS peer transport and automated tests
+- [x] Public test fixtures and offline verification examples
 
-## Milestone 1 — Protocol hardening
-- [ ] Formal transaction and output schemas
-- [ ] Strict input validation and size limits
-- [ ] Issuer identity and key rotation model
-- [ ] Signed revocation records and status proofs
-- [ ] Property-based and adversarial tests
+## Next — CI and protocol hardening
+- [ ] Run full test suite on supported Python versions in GitHub Actions
+- [ ] Add coverage reporting and minimum coverage policy
+- [ ] Add fuzz/property-based tests for parsers and signed messages
+- [ ] Publish deterministic cross-language test vectors
+- [ ] Review TLS/mTLS deployment profile and key rotation
+- [ ] Independent protocol and cryptographic audit
 
-## Milestone 2 — Durable infrastructure
-- [ ] Transactional persistent storage
-- [ ] Atomic double-spend prevention under concurrency
-- [ ] Append-only audit history
-- [ ] Recovery and backup specification
-
-## Milestone 3 — Interoperability
-- [ ] Versioned public API
-- [ ] Portable certificate and proof formats
-- [ ] HUC Direct SDK
-- [ ] Android and enterprise integration examples
-
-## Milestone 4 — Network research
-- [ ] Peer communication requirements
-- [ ] Deterministic validation rules
-- [ ] Consensus/finality decision, if a multi-operator network is required
-- [ ] Independent security and performance assessment
-
-A milestone is complete only after tests pass and acceptance criteria are documented.
+## Production-readiness research
+- [ ] Transactional durable storage and anti-rollback protections
+- [ ] Formal safety/liveness analysis under explicit network assumptions
+- [ ] Four-device and multi-institution WAN test
+- [ ] Backup, recovery, monitoring and incident-response procedures
+- [ ] Stable HUC Direct SDK API and Android integration tests
+- [ ] Versioned interoperability specification

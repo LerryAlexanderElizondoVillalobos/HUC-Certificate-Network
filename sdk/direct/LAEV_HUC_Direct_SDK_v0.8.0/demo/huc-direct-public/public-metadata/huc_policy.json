@@ -1,0 +1,15 @@
+{
+  "consensus_mode": "ISSUER_SIGNED_POLICY",
+  "issuer_id": "LAEV-DIRECT-DEMO",
+  "protocol": "LAEV-HUC-DIRECT/0.8.0",
+  "required_signatures": 1,
+  "rules": {
+    "huc_cc_required": true,
+    "revoked_reactivation_allowed": false,
+    "state_attestation_required": true,
+    "state_attestation_ttl_seconds": 900,
+    "x509_required": true
+  },
+  "schema": "LAEV-HUC-POLICY-1",
+  "signature_algorithm": "Ed25519"
+}

@@ -1,0 +1,33 @@
+{
+  "payload": {
+    "authority_count": 3,
+    "authorized_state_at_issuance": "ACTIVE",
+    "certificate_serial_number": "153115945796372666286090967609509731976554043268",
+    "certificate_sha256_der": "1b20aa8dca41b9b59b2e0e55b8baba780e82d2cd8caf31e9b29aae920fb5b234",
+    "consensus_certificate_id": "huc-cc:26415088bd7bef45c4e0c3d6ae3add468705df01c467dacfbf7933d6af1adc07",
+    "consensus_mode": "MULTI_SIGNATURE",
+    "initial_utxo_outpoint": {
+      "txid": "ba324967d448f594e40e2c25961c981da9f11574ab3f823dc7c7d67200f32ad6",
+      "vout": 0
+    },
+    "issued_at_utc": "2026-11-12T03:28:20Z",
+    "not_after_utc": "2027-03-12T03:28:20Z",
+    "operation": "ISSUE",
+    "policy_id": "HUC-2-OF-3",
+    "policy_sha256": "42af1e8c337e94b3b3678c6beb1ec1a001fccf420d0e725fef0cd57236c356f1",
+    "threshold": 2,
+    "utxo_sequence_at_issuance": 0
+  },
+  "signatures": [
+    {
+      "authority_id": "HUC-AUTH-01",
+      "signature": "Dw2aaa0v/9JBPsvDXQLRLodKUZmAAyZf5AN7/yu4JvBJlMAz2mpcGww/JT/77VrafyBTIZFh8SCael0m37avDg=="
+    },
+    {
+      "authority_id": "HUC-AUTH-02",
+      "signature": "15KZAG70CLzEqEvkjt/xNdQ5URZucR8OOgYgCxz9lLvcVxezsgaawzFz7iKWFqxMO1iKfYA+3QmXLWmYeDCyAQ=="
+    }
+  ],
+  "type": "LAEV-HUC-CC",
+  "version": "1"
+}

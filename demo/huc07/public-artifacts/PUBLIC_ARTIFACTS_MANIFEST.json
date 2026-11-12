@@ -1,0 +1,147 @@
+{
+  "project": "LAEV HUC",
+  "version": "0.7.0",
+  "private_keys_included": false,
+  "artifacts": [
+    {
+      "file": "ca_certificate.pem",
+      "size_bytes": 1484,
+      "sha256": "ea9167fcacf694fcd89c228f94036770c498406e54b926f14708acfce73b0124"
+    },
+    {
+      "file": "certificate-issued.pem",
+      "size_bytes": 1350,
+      "sha256": "a58672ac43b38cb74db94542567828604c60d4336f079719f311b9e5d8cfa913"
+    },
+    {
+      "file": "certificate-renewed.pem",
+      "size_bytes": 1350,
+      "sha256": "f3685626edf9e74638811316eee12bba9e93b46d9045ecf34a5b5904f78ac49f"
+    },
+    {
+      "file": "commit-issue.json",
+      "size_bytes": 7334,
+      "sha256": "a5a398e65f4cbf237129d3a0c7bf51a9176188508f1b031d5de1bdf7923943b3"
+    },
+    {
+      "file": "commit-renew.json",
+      "size_bytes": 7571,
+      "sha256": "bcb6be4ae634e34e07f9f6662f81edbd187029c5ae29d81e33a501f4fb35781d"
+    },
+    {
+      "file": "commit-revoke.json",
+      "size_bytes": 7510,
+      "sha256": "34c617e54af36ec498a377406f4183e29b8aed976962bb23a08bf22bf5ba4bea"
+    },
+    {
+      "file": "consensus-issued.json",
+      "size_bytes": 1238,
+      "sha256": "c90ae1a8893ad8aab58ef18ea4a9833213a7b9494c99b6514de97ac4bf5627b8"
+    },
+    {
+      "file": "consensus-renewed.json",
+      "size_bytes": 1238,
+      "sha256": "e91e21027338badd9b3bba580d03a8598b40b571863036f7e64d754fa6324386"
+    },
+    {
+      "file": "consensus_policy.json",
+      "size_bytes": 1278,
+      "sha256": "ea30fcae8758a9e0045fc560ef8babc9bb90cccde6a880dc5c9bb5d038ee30cb"
+    },
+    {
+      "file": "final-node-status.json",
+      "size_bytes": 1591,
+      "sha256": "594e6de5af8e961641949696ca2d5e326c56222c871c8d1f7298a5189e9c2e00"
+    },
+    {
+      "file": "join-request-HUC-E.json",
+      "size_bytes": 802,
+      "sha256": "4261f4ec51151bf40f6f077efafb25fe9d262d1ac164c9dc633d90112164bd0b"
+    },
+    {
+      "file": "membership-broadcast-result.json",
+      "size_bytes": 617,
+      "sha256": "230a52093865c9a3426c3d051a15facc0c4682d9602a8f6cb95fde039ba7cc99"
+    },
+    {
+      "file": "membership-package.json",
+      "size_bytes": 46246,
+      "sha256": "860275f78db30b369557a6ccbc7690cc7e42ac5bad42129a2a288ee8c25fbe7f"
+    },
+    {
+      "file": "membership-proposal.json",
+      "size_bytes": 4303,
+      "sha256": "4f1fda19012fa9ccd5e9b9f309ed9978159f804f0c83cdd5e5de70a95c505bd2"
+    },
+    {
+      "file": "network-epoch0.json",
+      "size_bytes": 4619,
+      "sha256": "8eb3e969b135e548e7a0aa861947ce7f6095bb541f3c48a133e5dc22ac39889b"
+    },
+    {
+      "file": "network-epoch1.json",
+      "size_bytes": 4737,
+      "sha256": "bad20f13dc9e833d1057e29a7a06bf9e3af85fb27ec5a72069e7b3570508e1d7"
+    },
+    {
+      "file": "node-public-HUC-B.json",
+      "size_bytes": 366,
+      "sha256": "81e3c84d450c053a0d72e3e9d5c9289966c7104bc06f47a32782f7eff9b65971"
+    },
+    {
+      "file": "node-public-HUC-C.json",
+      "size_bytes": 366,
+      "sha256": "79d74d7e74756b68c76cff291d761ee994200eb0c2f023b865175e128eac7e58"
+    },
+    {
+      "file": "node-public-HUC-D.json",
+      "size_bytes": 366,
+      "sha256": "8ba04da31eadb9078f115c1ea046bfcce9f062e9914420da238e8dee82bce36e"
+    },
+    {
+      "file": "node-public-HUC-E.json",
+      "size_bytes": 366,
+      "sha256": "47848b461d57fc33ad87c58746ec649a6892ebd5c18f0a952877a4db3f3b23ff"
+    },
+    {
+      "file": "peer-map-epoch0.json",
+      "size_bytes": 627,
+      "sha256": "d2cf638cf72e547aa88b7134b627ee9de60a445cc0f47aab06b962afb2fccc2a"
+    },
+    {
+      "file": "peer-map-epoch1.json",
+      "size_bytes": 627,
+      "sha256": "62ed54a6fdcf6c5087ec0fe9c9111380191746657f4745ff054f5af2f0f1376a"
+    },
+    {
+      "file": "proposal-issue.json",
+      "size_bytes": 4164,
+      "sha256": "6f46316617ae9bcf1b32498a2b7989c2e8e6db3c6fb353bb1a777c2888dec502"
+    },
+    {
+      "file": "proposal-renew.json",
+      "size_bytes": 4389,
+      "sha256": "6871c517413e451756a0e9efef679d59630a1ed86da2d71e2e5b501906c68653"
+    },
+    {
+      "file": "proposal-revoke.json",
+      "size_bytes": 4320,
+      "sha256": "495ca03b80764902c5b58cbfea220a00b4814a744c9e05dbffa2e052b06c10b7"
+    },
+    {
+      "file": "scenario-results-run.json",
+      "size_bytes": 1314,
+      "sha256": "086044d6785f07e2d0f1ef6324691adffee9194f6e9acc853cf775cde4b83d02"
+    },
+    {
+      "file": "scenario-results.json",
+      "size_bytes": 1314,
+      "sha256": "bc34e77602ca42710741154c04db8ef50e4403407f30fad24f54a0f161408c5d"
+    },
+    {
+      "file": "view-change-certificate.json",
+      "size_bytes": 2482,
+      "sha256": "43d46730adcbe4fac56efa8d5c59ef6bdf01be0b664f71117d914d7b7832f63b"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "body": {
+    "created_at_utc": "2026-11-12T03:28:20Z",
+    "from_view": 0,
+    "last_head_hash": "fc5c750a170533c2a361ef16cd2ff632c728f8107724820497fcf3043aa3adeb",
+    "last_sequence": 1,
+    "network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+    "quorum": 3,
+    "recovery_proposal": null,
+    "recovery_proposal_id": null,
+    "schema": "LAEV-HUC-RSP-VIEW-CERTIFICATE-1",
+    "target_view": 1,
+    "view_changes": [
+      {
+        "payload": {
+          "created_at_utc": "2026-11-12T03:28:20Z",
+          "from_view": 0,
+          "last_head_hash": "fc5c750a170533c2a361ef16cd2ff632c728f8107724820497fcf3043aa3adeb",
+          "last_sequence": 1,
+          "network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+          "reason": "unreachable-primary",
+          "schema": "LAEV-HUC-RSP-VIEW-CHANGE-1",
+          "slot_lock": null,
+          "target_view": 1,
+          "validator_id": "HUC-B"
+        },
+        "signature": "V2q+ft8+yjOi+1nnlNYv0X5XTMyed+H0wyQlKCzS/9b1hdBj3Y+mr3VjEkmyjh1w+6SvQAxYH9OKmZTtp9z9CQ=="
+      },
+      {
+        "payload": {
+          "created_at_utc": "2026-11-12T03:28:20Z",
+          "from_view": 0,
+          "last_head_hash": "fc5c750a170533c2a361ef16cd2ff632c728f8107724820497fcf3043aa3adeb",
+          "last_sequence": 1,
+          "network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+          "reason": "unreachable-primary",
+          "schema": "LAEV-HUC-RSP-VIEW-CHANGE-1",
+          "slot_lock": null,
+          "target_view": 1,
+          "validator_id": "HUC-C"
+        },
+        "signature": "doKlnIIFzd9FG06vGYPeWVjMnmEXNL8wvC4QdhNDFihD7xzyb3CIWixloOEIqXYf3XHekca1XQfSzpT02nkIBg=="
+      },
+      {
+        "payload": {
+          "created_at_utc": "2026-11-12T03:28:20Z",
+          "from_view": 0,
+          "last_head_hash": "fc5c750a170533c2a361ef16cd2ff632c728f8107724820497fcf3043aa3adeb",
+          "last_sequence": 1,
+          "network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+          "reason": "unreachable-primary",
+          "schema": "LAEV-HUC-RSP-VIEW-CHANGE-1",
+          "slot_lock": null,
+          "target_view": 1,
+          "validator_id": "HUC-D"
+        },
+        "signature": "JSDOZ1h/nLDTV89XP34Cnq4+bM+fs2w1/kAAbmGaUepAsT55vnUtW5OAjuie0dF0I/5UytP+uwSFjDmC1WsUBQ=="
+      }
+    ]
+  },
+  "view_certificate_id": "27b010214640c3523aa8bc8b60e18335fc069c0cd673cfe5ac6218018a5061a1"
+}

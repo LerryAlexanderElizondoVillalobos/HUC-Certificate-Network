@@ -1,0 +1,80 @@
+{
+  "created_at_utc": "2026-11-12T03:28:20Z",
+  "fault_tolerance": 1,
+  "network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+  "pki": {
+    "ca_certificate_der_sha256": "3f5c3aeb7ffc846d7af7e455180568dfa3451b364dd5790cf8d4d0135dcd01cf",
+    "ca_certificate_pem": "-----BEGIN CERTIFICATE-----\nMIIEGzCCAoOgAwIBAgIUXWhVcNX3umHZYA/Fa0fbYhmj6T4wDQYJKoZIhvcNAQEL\nBQAwJDEiMCAGA1UEAwwZTEFFViBIVUMgRGVtb25zdHJhdGlvbiBDQTAeFw0yNjEx\nMTIwMzIzMTlaFw0zNjExMDkwMzI4MTlaMCQxIjAgBgNVBAMMGUxBRVYgSFVDIERl\nbW9uc3RyYXRpb24gQ0EwggGiMA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQDD\nKFKnuXwBaK1vP/fTvs0hIsS0iv8qQ3IJpWM3JON1h3ryq3lyH0bohbHEtWo8NJr4\nH/CsuaOz8gIhMq3LlDIX8B2XXvv3t/zi1nIYQ5EPJ3+ALb25k3qnGvsJLGXtjzi7\nnNwiPvUcBvmJ5IZfM+sDR8yavtS3pL9cyVEUewH2sDJRNU9pdzR6JV4/PANZavV2\nBaaAHQh6HuTRwhmT8R82K6PeEk4NAuIUOfMEb7LdH1ssoFA7NOSb0biMETQxI2fU\nn7PFf658gsvYCHntxAQsOtvhWQ/HlKxFQ/fGM2/CH6zsU49o7rG767fTfgR6BuBi\npXF1ODnoK7cGiIcaVzQvqd4EW8KUb9sWnZNaqxFZSU5yq07nY6C16X6n6GHkZfCn\nhK2V7eu3Q9gI62oDBqcK3H1pgIRTz+Wg0bnAXshWpT1cZsuS39gOuaeOV60lT5N3\nkrIX15W6Yf4vL3O467m7WnWPtqg8AblZ642kavhg0Tyk6+zVwiabfXPP0qN4LikC\nAwEAAaNFMEMwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM8ZcFO4rifyW\nTfWLQzaHDXegHWwwDgYDVR0PAQH/BAQDAgGGMA0GCSqGSIb3DQEBCwUAA4IBgQBo\n7BHCe8vD1K5puo0jrbfQKaXiwr2OY7fA0MEYjLLbNy8o5qstpqD8hShNKB6Ks0X6\nySIpUSwBYngiVGIIGZQYAn7ww8zAAMqLR8N/+hv/0pKX0cHIu4ER2VK8KymwWj1e\n9s4Z/f38FEpEfelOUh/jdaj0MFuugIbab1lg2nLYOLsq0I8Qz5FjN1nYUagAueEc\na+OQDPFwKopnfS5CQkFBoR4HRmTpD9B+ecwsixmkwfH71QQtTeezqsmltTod5pSm\nwzM+88Inw5qoEypxN//xCfCcAioreL8GeV5sPMUs6iGOTxg7vxJqgkUI4OcUgU9y\nnMsR5bGJ47kWQ7GqIX0RnxGQowpCPvMr1LrUrUAduFm3ndeJw51aYVsPrOvPqfQI\nJuLYYlolZdyULp8jdQAbaykGzoWiA9qe7OdAwZu+FtZA95ce2IUDCv6p4njzCJM+\nP5iCEZg7Lg6Y4agfffPBriFUG1kJ5ekmmiEh9K9Og3atV7HVrgQOqr3Uh4/D57M=\n-----END CERTIFICATE-----\n",
+    "consensus_policy": {
+      "authorities": [
+        {
+          "authority_id": "HUC-AUTH-01",
+          "permissions": [
+            "ISSUE",
+            "RENEW",
+            "REVOKE"
+          ],
+          "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAoXHadDE+5+uVIYyd2xR94XSz+gOn02/PhlG45ShXsnw=\n-----END PUBLIC KEY-----\n"
+        },
+        {
+          "authority_id": "HUC-AUTH-02",
+          "permissions": [
+            "ISSUE",
+            "RENEW",
+            "REVOKE"
+          ],
+          "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAzCxhgc8KBMODNXOnn3i1fUAE19MSKYgs1uQPBDURCpA=\n-----END PUBLIC KEY-----\n"
+        },
+        {
+          "authority_id": "HUC-AUTH-03",
+          "permissions": [
+            "ISSUE",
+            "RENEW",
+            "REVOKE"
+          ],
+          "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEArdtEWCHcBou4lx8tS05/iw0/+KWirCCj1fIEXiCu7Q8=\n-----END PUBLIC KEY-----\n"
+        }
+      ],
+      "authority_count": 3,
+      "policy_id": "HUC-2-OF-3",
+      "protocol": "LAEV-HUC-CC",
+      "rules": {
+        "issue_requires_threshold": true,
+        "renew_requires_threshold": true,
+        "revoke_requires_threshold": true,
+        "revoked_certificate_reactivation_allowed": false,
+        "utxo_double_spend_allowed": false
+      },
+      "schema": "LAEV-HUC-CONSENSUS-POLICY-1",
+      "signature_algorithm": "Ed25519",
+      "threshold": 2,
+      "version": "1"
+    },
+    "consensus_policy_sha256": "42af1e8c337e94b3b3678c6beb1ec1a001fccf420d0e725fef0cd57236c356f1"
+  },
+  "protocol": "HUC-RSP/0.6",
+  "quorum": 3,
+  "schema": "LAEV-HUC-RSP-NETWORK-1",
+  "validators": [
+    {
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA50xJB+HxYkFV4wYUlB//K0JAdsC/E7Y2D/SzWzG9/vM=\n-----END PUBLIC KEY-----\n",
+      "public_key_sha256": "d546cf497cdceae550779a0acb02e7c404f6e3ad5a0cb5b8f7f5dfd84e5f4fd1",
+      "validator_id": "HUC-A"
+    },
+    {
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAE6UyOfguQHJ1YS7dbnBzR2sGAxHEgS0m/dE4cwNl6nY=\n-----END PUBLIC KEY-----\n",
+      "public_key_sha256": "4aff9555f7c3525ef1dc6c9c4649fad3ec195ef9dfd3c40b5b046cc248953152",
+      "validator_id": "HUC-B"
+    },
+    {
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAmnZShLrvsZout10vo1OCBufottsrhtkKIJX3W0hJRCM=\n-----END PUBLIC KEY-----\n",
+      "public_key_sha256": "8aa57f020599b8347e8768018053a2e7a00280cc344eca1f1b90b8aa370db0eb",
+      "validator_id": "HUC-C"
+    },
+    {
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA35dGGj42nsmm1KfKLuz+IUKCfzYjHyakLUPorszy3nM=\n-----END PUBLIC KEY-----\n",
+      "public_key_sha256": "b072f401f4c925799aeb0568da582159d2cfcc65a7af2f2c1f1f2b8c41f2fc02",
+      "validator_id": "HUC-D"
+    }
+  ]
+}

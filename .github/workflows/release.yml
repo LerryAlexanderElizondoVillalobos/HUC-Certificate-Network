@@ -1,0 +1,33 @@
+name: HUC Release Validation
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Run complete tests
+        run: python -m unittest discover -s tests -v
+      - name: Verify public HUC certificate fixtures
+        run: bash demo/verify_demos.sh
+      - name: Install and test HUC Direct SDK
+        working-directory: sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/python
+        run: |
+          python -m pip install -e ".[api,test]"
+          python -m pytest -q ../tests
+      - name: Verify tag matches VERSION
+        if: startsWith(github.ref, 'refs/tags/')
+        run: test "$(cat VERSION)" = "${GITHUB_REF_NAME#v}"

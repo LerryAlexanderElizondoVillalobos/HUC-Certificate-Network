@@ -1,0 +1,32 @@
+{
+  "version": "0.5.0",
+  "authority_count": 3,
+  "threshold": "2-of-3",
+  "authority_private_keys_in_coordinator": false,
+  "authority_private_keys_in_release": false,
+  "issue_signers": [
+    "INSTITUTION-A",
+    "INSTITUTION-C"
+  ],
+  "revoke_signers": [
+    "INSTITUTION-B",
+    "INSTITUTION-C"
+  ],
+  "active_bundle": {
+    "package_verified": true,
+    "hybrid_valid": true,
+    "utxo_status": "ACTIVE",
+    "result": "VALID"
+  },
+  "revoked_bundle": {
+    "package_verified": true,
+    "hybrid_valid": false,
+    "utxo_status": "REVOKED",
+    "result": "INVALID"
+  },
+  "expected": {
+    "active_bundle_hybrid_valid": true,
+    "revoked_bundle_hybrid_valid": false,
+    "revoked_bundle_utxo_status": "REVOKED"
+  }
+}

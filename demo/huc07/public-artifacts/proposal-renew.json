@@ -1,0 +1,60 @@
+{
+  "payload": {
+    "action": "RENEW",
+    "certificate_sha256": "5617049194deb4689b2c5860c91c37a6fa89220d5cbce30e88698150f1a59d07",
+    "consensus_certificate_sha256": "b15b6f9a81c4f0f0afbff7e1176451097306e680440b4e34046166b6b5a75dca",
+    "created_at_utc": "2026-11-12T03:28:20Z",
+    "epoch": 0,
+    "evidence": {
+      "certificate_pem_b64": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUR1VENDQWlHZ0F3SUJBZ0lVVVNoM0hLQ2xuVmgvQkthaUkybXp5RzJBdS9Nd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0pERWlNQ0FHQTFVRUF3d1pURUZGVmlCSVZVTWdSR1Z0YjI1emRISmhkR2x2YmlCRFFUQWVGdzB5TmpFeApNVEl3TXpJek1qQmFGdzB5TnpBek1USXdNekk0TWpCYU1DY3hKVEFqQmdOVkJBTU1IRWhWUXlBd0xqY2dSR1Z0CmIyNXpkSEpoZEdsdmJpQkliMnhrWlhJd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUIKQVFDUFNpN09kOEJlVkRBTjZRdUovUmhJRUJaT1VoR21xNUF3TWliWFl6REt2eXNtUzI2bytjQXhTbXByaHRJMApnZGRadWNCRWlVZWZVWXVjR0dMNm0zZ05UbWxBWUhBYzkvMWs5a2VDVFZSdXEzVWRobU1mT3kyMStSb0hSNkUrCm14QVdYbFFDTFNBb2NOREptZlh5RlNxaVVnZVJUWWpJNGdjaTIrUFhQd0JWVzl2Mjl4NkpBNmw0bzdHeXoxYmYKQnhqb2c5VUNmSkd0NjJYTW92SldWNHIwSjJCcUs4bjBySWt2YWMzdmx1WCs1NkJZcTMzbm5aNVRCeDJQN0t4UQovcy8xdWxJTDQ2eldRVkNuRjZ6YnBONDE2NWR3cHdWcjhJbjRuaDgwTmJidEVwMGZJVFBIbkhGVFZIblpFV3h0CnRNUy9vOUpkY0tyRVJKd3ZQRmdobUNnNUFnTUJBQUdqWURCZU1Bd0dBMVVkRXdFQi93UUNNQUF3SFFZRFZSME8KQkJZRUZHNElkMVNjK3lsVW9JVWJtVFFUYmhmYTV6bTNNQjhHQTFVZEl3UVlNQmFBRkRQR1hCVHVLNG44bGszMQppME0yaHcxM29CMXNNQTRHQTFVZER3RUIvd1FFQXdJRjREQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FZRUFqbEV1Ck4rZm5uK0l0M1VaZlNjajdvWmwySGFQVzZFZ2tmSDQ2U1VBY0JEQ1JhenUvZldXWUZLSFNIMHBDS2lzLzFVTUQKZ2xXc05lS2owNnVVRkNUd1dHcmdCNXRkL2ZJeTVsd3NPMnFHaFZHMGFvTkVEVUFoRDEwKzRHR2h4cEUvZTRzWAozcTNlUEpMbGEzMzBJSmNncFc5ZUROaE93UFd3RGdPWm15dTJ2NndTVkFIT3VXRStFRWU4bnY2dll4cFYwd2hzCjZQTnMrVkRkeU8rL2ZrbHIwSjMyVWc1OVlxUFpnWDBLNEMzM3g4M0hPd0QrVm5zVjR6Q0xXbnMrL1lLR2dZaHgKZnp0VXdPdGVzSUlhK01nNWk5eWF1VDBTWFVDOUYxSFV2Q2VEV01BUXpGUjBpU1hxMWtMeEpMcCtEK2UrVmQyTgprVGRLbzFHR3RlTVJDdkZZbHpsVXlxTFBENElIUUkrNGhud0xmVCtOTGFlN2ZjMHA5VWYyQ0V3eldKb3RNVHZvCnFhYWZVMEk5SDVVMWJzWDNMN1Q1cmhqc0s0bk1BSm5YNFM3bGVRVUNrR3E2aTVkdm96REhQUWNMUkh3OU9laWcKbG1wR09wNE1SUUh5S3JTakttbFo0THJUbjdDVDU3cjhSbUhFc0JyT3BGWmVldUdnM2VrbnBuOFVVVXJ1Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K",
+      "consensus_certificate": {
+        "payload": {
+          "authority_count": 3,
+          "authorized_state_at_issuance": "ACTIVE",
+          "certificate_serial_number": "463330658348140779301115087696256844498141756403",
+          "certificate_sha256_der": "5617049194deb4689b2c5860c91c37a6fa89220d5cbce30e88698150f1a59d07",
+          "consensus_certificate_id": "huc-cc:60eb7052eb440911418bc0a37eee214e08fe19b7de61edc798ef34c6857b865a",
+          "consensus_mode": "MULTI_SIGNATURE",
+          "initial_utxo_outpoint": {
+            "txid": "a01d1a1b46ee7c0fe9cbd0ff5b6f99048d6e76d9440ac02968b2dc5bdc11f334",
+            "vout": 0
+          },
+          "issued_at_utc": "2026-11-12T03:28:20Z",
+          "not_after_utc": "2027-03-12T03:28:20Z",
+          "operation": "RENEW",
+          "policy_id": "HUC-2-OF-3",
+          "policy_sha256": "42af1e8c337e94b3b3678c6beb1ec1a001fccf420d0e725fef0cd57236c356f1",
+          "threshold": 2,
+          "utxo_sequence_at_issuance": 1
+        },
+        "signatures": [
+          {
+            "authority_id": "HUC-AUTH-01",
+            "signature": "Lrn+HeASPOIealKL1h1invQ/eAkhF/tycyD4Geik9LXzdfRD3eVnb7pKxUO+6lJIAWa2yah9BwwlnMj6lKsfCw=="
+          },
+          {
+            "authority_id": "HUC-AUTH-02",
+            "signature": "Wz9JUVq53c42CU9ddf2MXo0aHYswNM2I0ovUwEojIEA5j9OVOkHU5DJ2HMQepp5CmnUXayCEa0cs+9UAf43KBg=="
+          }
+        ],
+        "type": "LAEV-HUC-CC",
+        "version": "1"
+      }
+    },
+    "expires_at_utc": "2026-11-12T03:38:20Z",
+    "metadata": {},
+    "network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+    "previous_certificate_sha256": "1b20aa8dca41b9b59b2e0e55b8baba780e82d2cd8caf31e9b29aae920fb5b234",
+    "previous_outpoint": {
+      "txid": "8d7ad22329a132d928b68f73447629dbc4f3743b4775d5880db29c5f0b23947c",
+      "vout": 0
+    },
+    "previous_state_hash": "fc5c750a170533c2a361ef16cd2ff632c728f8107724820497fcf3043aa3adeb",
+    "proposer_id": "HUC-B",
+    "schema": "LAEV-HUC-RSP-PROPOSAL-1",
+    "sequence": 2,
+    "view": 1,
+    "view_certificate_id": "27b010214640c3523aa8bc8b60e18335fc069c0cd673cfe5ac6218018a5061a1"
+  },
+  "proposal_id": "254826db55890ba53a5e26f662b00c778ac95e20a6daa138996f761aa76eea97"
+}

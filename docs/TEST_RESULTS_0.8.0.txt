@@ -1,0 +1,40 @@
+LAEV HUC 0.8.0 — TEST REPORT
+===========================
+Command:
+  python -m unittest discover -s tests -v
+
+Result:
+  Ran 90 tests in 19.188s
+  OK
+
+Environment:
+  Python 3.13.5
+  cryptography 46.0.4
+  filelock 3.29.0
+
+Coverage represented in the current suite:
+  - HUC X.509 + HUC-CC + logical UTXO lifecycle
+  - Independent authority signatures and quorum policy
+  - Replicated state, no-double-spend and anti-equivocation
+  - PRE-PREPARE / PREPARE / PrepareCertificate
+  - Durable prepared locks and PreparedCertificate
+  - COMMIT / CommitCertificate
+  - View-change, recovery and conflicting prepared-certificate safety halt
+  - P2P/TCP phase orchestration and message replay rejection
+  - Partition below quorum does not commit
+  - Altered signatures, invalid phases and wrong primary are rejected
+  - X.509 and HUC-CC verified before validators vote
+  - Export/sync verifies commit and view history and rejects rollback/fork
+  - Four independent Python node server processes using TLS on loopback
+  - Concurrent conflicting PRE-PREPAREs cannot cause one replica to double-sign
+
+Important boundary:
+  The four-process TLS integration test runs on one host using loopback.
+  It is not a test on four physical computers, phones, independent networks,
+  NAT traversal or the public Internet. See PHYSICAL_DEVICE_TEST.md for the
+  manual institution-to-institution test procedure.
+
+Security status:
+  Experimental PBFT-inspired reference implementation; no formal proof,
+  external cryptographic audit, production hardening or independent deployment
+  certification has been completed.

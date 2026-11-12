@@ -1,0 +1,152 @@
+openapi: 3.1.0
+info:
+  title: LAEV HUC Direct API
+  version: 0.8.0
+  description: Issue, renew, revoke and verify HUC credentials; optional direct challenge-response.
+servers:
+  - url: https://huc-api.example.org
+paths:
+  /healthz:
+    get:
+      summary: Health check
+      responses:
+        '200': { description: Service health }
+  /v1/trust:
+    get:
+      summary: Return issuer ID and trust anchor pin
+      responses:
+        '200':
+          description: Public trust metadata
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TrustInfo' }
+  /v1/credentials/issue:
+    post:
+      summary: Issue a credential from a holder-signed CSR
+      security: [{ HucAdminToken: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [csr_pem]
+              properties:
+                csr_pem: { type: string, minLength: 100, maxLength: 200000 }
+                days: { type: integer, minimum: 1, maximum: 825, default: 365 }
+      responses:
+        '200': { description: Issued public credential and ZIP package }
+        '401': { description: Invalid issuer administration token }
+  /v1/credentials/renew:
+    post:
+      summary: Renew a credential, consuming its previous logical UTXO
+      security: [{ HucAdminToken: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [previous_certificate_pem, new_csr_pem]
+              properties:
+                previous_certificate_pem: { type: string, minLength: 100 }
+                new_csr_pem: { type: string, minLength: 100 }
+                days: { type: integer, minimum: 1, maximum: 825, default: 365 }
+      responses:
+        '200': { description: Renewed credential package }
+        '401': { description: Invalid issuer administration token }
+  /v1/credentials/refresh:
+    post:
+      summary: Refresh a signed state attestation and current credential package
+      security: [{ HucAdminToken: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [certificate_pem]
+              properties:
+                certificate_pem: { type: string, minLength: 100 }
+      responses:
+        '200': { description: Current signed status and refreshed package }
+        '401': { description: Invalid issuer administration token }
+  /v1/credentials/revoke:
+    post:
+      summary: Revoke an active credential
+      security: [{ HucAdminToken: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [certificate_pem, reason]
+              properties:
+                certificate_pem: { type: string, minLength: 100 }
+                reason: { type: string, minLength: 3, maxLength: 500 }
+      responses:
+        '200': { description: Revocation and refreshed status package }
+        '401': { description: Invalid issuer administration token }
+  /v1/credentials/verify:
+    post:
+      summary: Verify a public HUC ZIP package
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [bundle_b64]
+              properties:
+                bundle_b64: { type: string, format: byte }
+      responses:
+        '200': { description: VALID, INVALID or INDETERMINATE result }
+        '400': { description: Malformed package or failed integrity check }
+  /v1/direct/challenges:
+    post:
+      summary: Create a single-use relying-party challenge
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [certificate_sha256, audience]
+              properties:
+                certificate_sha256: { type: string, pattern: '^[0-9a-f]{64}$' }
+                audience: { type: string, minLength: 1, maxLength: 256 }
+                ttl_seconds: { type: integer, minimum: 10, maximum: 300, default: 120 }
+      responses:
+        '200': { description: Challenge JSON with nonce and expiry }
+  /v1/direct/verify:
+    post:
+      summary: Verify holder proof-of-possession and consume challenge nonce
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [challenge, response, audience]
+              properties:
+                challenge: { type: object }
+                response: { type: object }
+                audience: { type: string }
+      responses:
+        '200': { description: Direct presentation result }
+        '400': { description: Challenge, credential, signature, audience or replay failure }
+components:
+  securitySchemes:
+    HucAdminToken:
+      type: apiKey
+      in: header
+      name: X-HUC-Admin-Token
+  schemas:
+    TrustInfo:
+      type: object
+      properties:
+        issuer_id: { type: string }
+        trust_anchor_sha256: { type: string, pattern: '^[0-9a-f]{64}$' }
+        policy_sha256: { type: string, pattern: '^[0-9a-f]{64}$' }
+        state_ttl_seconds: { type: integer }

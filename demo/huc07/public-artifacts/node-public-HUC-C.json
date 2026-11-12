@@ -1,0 +1,8 @@
+{
+  "algorithm": "Ed25519",
+  "created_at_utc": "2026-11-12T03:28:20Z",
+  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAmnZShLrvsZout10vo1OCBufottsrhtkKIJX3W0hJRCM=\n-----END PUBLIC KEY-----\n",
+  "public_key_sha256": "8aa57f020599b8347e8768018053a2e7a00280cc344eca1f1b90b8aa370db0eb",
+  "schema": "LAEV-HUC-RSP-NODE-1",
+  "validator_id": "HUC-C"
+}

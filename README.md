@@ -1,60 +1,73 @@
-# HUC Certificate Network
+# LAEV HUC Certificate Network 0.8.0
 
-**HUC** is an experimental certificate infrastructure built around cryptographically signed attestations and a UTXO-inspired state model.
+**HUC — Hybrid UTXO Certificate** is an experimental certificate infrastructure combining X.509 credentials, signed HUC-CC authorization evidence, a logical UTXO lifecycle and an optional replicated BFT-inspired state network.
 
-> **Status:** early prototype / research software. Not production-ready. No Bitcoin dependency and no external blockchain dependency.
+> Status: experimental laboratory implementation. Not a blockchain, cryptocurrency, formally verified BFT protocol, production-certified PKI or independent security-audited system.
 
-## Project goals
+## Core capabilities
 
-- Issue digitally signed certificates.
-- Verify issuer signatures and certificate integrity.
-- Track certificate state as unspent outputs.
-- Revoke a certificate by consuming its active output and creating a revocation output.
-- Reject replay and double-consumption attempts.
-- Run repeatable checks through GitHub Actions.
+- X.509 certificate issuance, renewal and revocation.
+- HUC-CC signed authorization and certificate binding.
+- Logical UTXO state with sequence and hash-chain continuity.
+- Independent authority approvals and membership management.
+- Replicated state across independent validators.
+- PRE-PREPARE, PREPARE, prepared-lock acknowledgements and COMMIT.
+- Signed view change, prepared-operation recovery and state synchronization.
+- TCP peer transport, TLS transport security and Ed25519 application signatures.
+- Public verification bundles that do not contain issuer or validator private keys.
 
-## Current prototype
+## Architecture profiles
 
-The first milestone is a small Python reference implementation. It uses Ed25519 signatures through the `cryptography` package and an in-memory UTXO-style ledger. The ledger is a test model, not a distributed consensus network or durable production database.
+**Standalone / HUC Direct:** a verifier can validate a signed credential package offline using a separately distributed trust anchor and state attestation. It does not require validators or a network connection for basic package verification.
 
-## Quick start
+**Replicated / HUC BFT:** institutions operate independent validators to agree on shared certificate state. This is an optional deployment profile for shared state, not a prerequisite for local credential verification. The HUC 0.8 BFT implementation is PBFT-inspired and adds a HUC-specific prepared-lock acknowledgement stage; it is not claimed to be formally equivalent to PBFT.
 
-Requires Python 3.12 or newer.
+## Requirements
+
+- Python 3.10+
+- `cryptography>=42.0.0`
+- `filelock>=3.13.0`
+
+## Install and test
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -e ".[dev]"
+python -m pip install -r requirements.txt
 python -m unittest discover -s tests -v
-ruff check src tests
 ```
 
-## Repository structure
+The four-process TLS cluster test can be run independently:
 
-- `src/huc/`: certificate, cryptography and ledger primitives.
-- `tests/`: automated unit tests.
-- `docs/`: protocol decisions, security boundaries and roadmap.
-- `.github/workflows/`: automated CI and dependency checks.
+```bash
+python -m unittest tests.test_bft_process_cluster -v
+```
 
-## Initial certificate lifecycle
+## Repository map
 
-1. An issuer creates an Ed25519 key pair.
-2. HUC canonicalizes the certificate payload and signs it.
-3. The certificate identifier is derived from the canonical payload.
-4. Issuance creates an active certificate output in the ledger.
-5. Verification checks the payload hash, issuer signature, expiry and active ledger state.
-6. Revocation consumes the active output and creates a revocation output. A consumed output cannot be consumed again.
+- `huc.py`: X.509, HUC-CC, logical UTXO and certificate lifecycle.
+- `huc_bft.py`: BFT-inspired state machine, quorum certificates and recovery.
+- `huc_bft_peer.py`: BFT phase orchestration over peer transport.
+- `huc_peer.py`: authenticated TCP/TLS peer transport.
+- `huc_replicated.py`: replicated state and synchronization.
+- `huc_federation.py`: independent authority approval workflow.
+- `huc_membership.py`: validator membership transitions.
+- `huc_view.py`: view-change and recovery data structures.
+- `tests/`: automated unit, adversarial, network and cluster tests.
+- `demo/`: public demonstration fixtures and verification scripts.
+- `docs/`: protocol, architecture, certificate, security and physical-device procedures.
+- `sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/`: Python and Android application SDK.
+- `sdk/demo/`: public Direct SDK credential and challenge-response fixtures.
+- `.github/workflows/`: CI, security and integration automation.
 
-## Important limitations
+## Security boundaries
 
-- The ledger is process-local and loses state when the process exits.
-- There is no peer-to-peer networking, consensus, persistence, identity registry or production key management.
-- A signature proves control of a signing key, not legal authority or truth of the certificate claims.
-- Revocation is meaningful only relative to the ledger state consulted by the verifier.
-- Do not use real personal data, production credentials or valuable certificates in this prototype.
+The repository includes experimental security controls, but no independent cryptographic audit, formal verification, production hardening or physical multi-institution deployment certification has been completed. The TLS cluster test runs four processes on one host using loopback; it is not evidence of WAN, NAT or four-device interoperability. See [Security](docs/SECURITY.md) and [Physical device test](docs/PHYSICAL_DEVICE_TEST.md).
 
-See [Architecture](docs/ARCHITECTURE.md), [UTXO model](docs/UTXO-MODEL.md), [certificate specification](docs/CERTIFICATE-SPECIFICATION.md), [security](docs/SECURITY.md) and [roadmap](docs/ROADMAP.md).
+Never commit private keys, live credentials, production certificates or real personal data. Public demo fixtures are not production trust anchors.
 
-## License and commercial rights
+## Version reference
 
-No open-source license has been granted at this stage. All rights are reserved by the copyright holder. Reuse, redistribution and commercial use require separate permission unless a license or written agreement is added.
+The original HUC 0.8.0 source and public test packages remain preserved in `docs/` as versioned reference archives. See [Release notes](docs/RELEASE_NOTES_0.8.0.md), [Architecture](docs/ARCHITECTURE.md) and [Protocol](docs/PROTOCOL.md).
+
+## Commercial rights
+
+No open-source license is granted by this repository unless a LICENSE file explicitly states otherwise. All rights are reserved by the copyright holder. Commercial use, redistribution and derivative distribution require written permission or a separate license.

@@ -1,0 +1,90 @@
+{
+  "payload": {
+    "additions": [
+      {
+        "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAh/JMJ8yeKLkbB/GPUDC5CmMfQ2BFOEhp++WjMVY7Z9I=\n-----END PUBLIC KEY-----\n",
+        "public_key_sha256": "9c0bb1f113d1200d9db01fa9ec4012f46fc6858a069907e29a26ad7d4347bcdd",
+        "validator_id": "HUC-E"
+      }
+    ],
+    "created_at_utc": "2026-11-12T03:28:20Z",
+    "join_proofs": [
+      {
+        "descriptor": {
+          "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAh/JMJ8yeKLkbB/GPUDC5CmMfQ2BFOEhp++WjMVY7Z9I=\n-----END PUBLIC KEY-----\n",
+          "public_key_sha256": "9c0bb1f113d1200d9db01fa9ec4012f46fc6858a069907e29a26ad7d4347bcdd",
+          "validator_id": "HUC-E"
+        },
+        "payload": {
+          "created_at_utc": "2026-11-12T03:28:20Z",
+          "network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+          "nonce": "afc51a483cea00954ce0ff56389d68fa9965298dddeb6b3a944e460c6d9852da",
+          "public_key_sha256": "9c0bb1f113d1200d9db01fa9ec4012f46fc6858a069907e29a26ad7d4347bcdd",
+          "schema": "LAEV-HUC-MEMBERSHIP-JOIN-REQUEST-1",
+          "validator_id": "HUC-E"
+        },
+        "signature": "EgOT0iUjejaiPH41wXe9JQ2rHQEZBYQtgvYRsmM4IL74i7XV6Rdz9Jj4GSxCuDYsPwD89XmUy7J/v9ya+ZQLDw=="
+      }
+    ],
+    "membership_epoch": 1,
+    "previous_network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+    "previous_network_sha256": "6dede0724cab036426a620fd7003eef5e57816d8bcbd8c38587caeca2ab1e8af",
+    "previous_state": {
+      "certificates": {
+        "1b20aa8dca41b9b59b2e0e55b8baba780e82d2cd8caf31e9b29aae920fb5b234": {
+          "consensus_certificate_sha256": "b56b54f5e899d9eb3f50ff4d86f92a15e61eb0b4bd73e6ee8b4dfca4813d6f90",
+          "consumed_by_commit": "dde686b75d52f3f5de678d3305500ddefc74b98c537da09fcd5eefdf43ef7576",
+          "status": "SUPERSEDED"
+        },
+        "5617049194deb4689b2c5860c91c37a6fa89220d5cbce30e88698150f1a59d07": {
+          "consensus_certificate_sha256": "b15b6f9a81c4f0f0afbff7e1176451097306e680440b4e34046166b6b5a75dca",
+          "outpoint": {
+            "txid": "254826db55890ba53a5e26f662b00c778ac95e20a6daa138996f761aa76eea97",
+            "vout": 0
+          },
+          "status": "ACTIVE"
+        }
+      },
+      "commit_ids": [
+        "fc5c750a170533c2a361ef16cd2ff632c728f8107724820497fcf3043aa3adeb",
+        "dde686b75d52f3f5de678d3305500ddefc74b98c537da09fcd5eefdf43ef7576"
+      ],
+      "epoch": 0,
+      "head_hash": "dde686b75d52f3f5de678d3305500ddefc74b98c537da09fcd5eefdf43ef7576",
+      "network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+      "schema": "LAEV-HUC-RSP-CHECKPOINT-STATE-1",
+      "sequence": 2
+    },
+    "previous_state_sha256": "ccc2544d0e33b93431abece7d41a0493ec13a8b05a9fe7250ace3d65dcac3dc8",
+    "proposer_id": "HUC-B",
+    "removals": [
+      "HUC-A"
+    ],
+    "schema": "LAEV-HUC-MEMBERSHIP-PROPOSAL-1",
+    "target_fault_tolerance": 1,
+    "target_quorum": 3,
+    "target_validators": [
+      {
+        "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAE6UyOfguQHJ1YS7dbnBzR2sGAxHEgS0m/dE4cwNl6nY=\n-----END PUBLIC KEY-----\n",
+        "public_key_sha256": "4aff9555f7c3525ef1dc6c9c4649fad3ec195ef9dfd3c40b5b046cc248953152",
+        "validator_id": "HUC-B"
+      },
+      {
+        "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAmnZShLrvsZout10vo1OCBufottsrhtkKIJX3W0hJRCM=\n-----END PUBLIC KEY-----\n",
+        "public_key_sha256": "8aa57f020599b8347e8768018053a2e7a00280cc344eca1f1b90b8aa370db0eb",
+        "validator_id": "HUC-C"
+      },
+      {
+        "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA35dGGj42nsmm1KfKLuz+IUKCfzYjHyakLUPorszy3nM=\n-----END PUBLIC KEY-----\n",
+        "public_key_sha256": "b072f401f4c925799aeb0568da582159d2cfcc65a7af2f2c1f1f2b8c41f2fc02",
+        "validator_id": "HUC-D"
+      },
+      {
+        "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAh/JMJ8yeKLkbB/GPUDC5CmMfQ2BFOEhp++WjMVY7Z9I=\n-----END PUBLIC KEY-----\n",
+        "public_key_sha256": "9c0bb1f113d1200d9db01fa9ec4012f46fc6858a069907e29a26ad7d4347bcdd",
+        "validator_id": "HUC-E"
+      }
+    ]
+  },
+  "proposal_id": "9fc23fc5107c44cb1fc3167c2a2debd9fe703e74ab9f6777f57e5452fed44379"
+}

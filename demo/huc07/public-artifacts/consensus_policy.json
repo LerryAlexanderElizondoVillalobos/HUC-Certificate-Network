@@ -1,0 +1,45 @@
+{
+  "authorities": [
+    {
+      "authority_id": "HUC-AUTH-01",
+      "permissions": [
+        "ISSUE",
+        "RENEW",
+        "REVOKE"
+      ],
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAoXHadDE+5+uVIYyd2xR94XSz+gOn02/PhlG45ShXsnw=\n-----END PUBLIC KEY-----\n"
+    },
+    {
+      "authority_id": "HUC-AUTH-02",
+      "permissions": [
+        "ISSUE",
+        "RENEW",
+        "REVOKE"
+      ],
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAzCxhgc8KBMODNXOnn3i1fUAE19MSKYgs1uQPBDURCpA=\n-----END PUBLIC KEY-----\n"
+    },
+    {
+      "authority_id": "HUC-AUTH-03",
+      "permissions": [
+        "ISSUE",
+        "RENEW",
+        "REVOKE"
+      ],
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEArdtEWCHcBou4lx8tS05/iw0/+KWirCCj1fIEXiCu7Q8=\n-----END PUBLIC KEY-----\n"
+    }
+  ],
+  "authority_count": 3,
+  "policy_id": "HUC-2-OF-3",
+  "protocol": "LAEV-HUC-CC",
+  "rules": {
+    "issue_requires_threshold": true,
+    "renew_requires_threshold": true,
+    "revoke_requires_threshold": true,
+    "revoked_certificate_reactivation_allowed": false,
+    "utxo_double_spend_allowed": false
+  },
+  "schema": "LAEV-HUC-CONSENSUS-POLICY-1",
+  "signature_algorithm": "Ed25519",
+  "threshold": 2,
+  "version": "1"
+}
