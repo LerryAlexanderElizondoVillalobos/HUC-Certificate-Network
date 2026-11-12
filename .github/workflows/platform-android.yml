@@ -2,10 +2,10 @@ name: HUC Platform — Android
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, validation/huc-0.8.0-multiplatform, architecture/modular-platform-monorepo]
     paths: ['sdk/direct/**/android/**', 'platforms/android/**', '.github/workflows/platform-android.yml']
   push:
-    branches: [main]
+    branches: [main, validation/huc-0.8.0-multiplatform, architecture/modular-platform-monorepo]
     paths: ['sdk/direct/**/android/**', 'platforms/android/**', '.github/workflows/platform-android.yml']
   workflow_dispatch:
 permissions:
