@@ -45,10 +45,12 @@ class FundingSandbox:
 
     def _append_event(self, event_type: str, payload: dict[str, Any]) -> dict[str, Any]:
         previous = self._events[-1]["event_hash"] if self._events else "0" * 64
+        # Snapshot payloads: later state transitions must not mutate historical evidence.
+        payload_snapshot = json.loads(_canonical(payload).decode("utf-8"))
         body = {
             "sequence": len(self._events) + 1,
             "event_type": event_type,
-            "payload": payload,
+            "payload": payload_snapshot,
             "previous_hash": previous,
         }
         event = {**body, "event_hash": _digest(body)}
