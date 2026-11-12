@@ -176,12 +176,12 @@ def create_single_use_authorization(
         raise ValueError("outpoint, operation, resource_id and nonce are required")
     if expires_at <= int(time.time()):
         raise ValueError("Authorization expiry must be in the future")
-    if certificate.public_key().public_numbers() != private_key.public_key().public_numbers():
-        # public_numbers is available for RSA/EC, but not EdDSA.
-        if certificate.public_key().public_bytes(serialization.Encoding.DER,
-             serialization.PublicFormat.SubjectPublicKeyInfo) != private_key.public_key().public_bytes(
-             serialization.Encoding.DER, serialization.PublicFormat.SubjectPublicKeyInfo):
-            raise ValueError("Private key does not match the X.509 certificate")
+    if certificate.public_key().public_bytes(
+        serialization.Encoding.DER, serialization.PublicFormat.SubjectPublicKeyInfo
+    ) != private_key.public_key().public_bytes(
+        serialization.Encoding.DER, serialization.PublicFormat.SubjectPublicKeyInfo
+    ):
+        raise ValueError("Private key does not match the X.509 certificate")
     payload = {
         "schema": SCHEMA, "certificate_sha256_der": fingerprint(certificate),
         "outpoint": outpoint, "operation": operation, "resource_id": resource_id,
