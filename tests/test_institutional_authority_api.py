@@ -106,13 +106,16 @@ class InstitutionalAuthorityAPITests(unittest.TestCase):
                 self.assertEqual(body["institution_id"], name)
 
     def test_one_shared_authority_rejects_cross_institution_double_consume(self):
-        name, cert, key = self.clients[0]
-        auth = create_single_use_authorization(cert, key, outpoint="shared-utxo:0",
-            operation="APPROVE", resource_id="synthetic-case-01",
-            expires_at=int(time.time())+600, nonce="four-institution-test")
+        authorizations = []
+        for i, (name, cert, key) in enumerate(self.clients):
+            authorizations.append(create_single_use_authorization(cert, key,
+                outpoint="shared-utxo:0", operation="APPROVE",
+                resource_id="synthetic-case-01", expires_at=int(time.time())+600,
+                nonce=f"four-institution-test-{i}"))
         def attempt(i):
             try:
-                with self.request(i, "/v1/consume", {"authorization": auth}) as response:
+                with self.request(i, "/v1/consume",
+                                  {"authorization": authorizations[i]}) as response:
                     return response.status
             except urllib.error.HTTPError as exc:
                 return exc.code
