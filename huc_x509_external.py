@@ -9,6 +9,8 @@ from __future__ import annotations
 import base64
 import hashlib
 import json
+import os
+import stat
 import sqlite3
 import time
 from pathlib import Path
@@ -211,16 +213,67 @@ def verify_single_use_authorization(
             "operation": payload["operation"], "resource_id": payload["resource_id"]}
 
 
+class LinuxUserRuntime:
+    """Create HUC state under the current Linux user's private state directory.
+
+    No root privileges, setuid bit, or system-wide daemon are required.
+    """
+    def __init__(self, state_dir: str | Path | None = None):
+        if os.name != "posix" or not hasattr(os, "getuid"):
+            raise RuntimeError("Linux User Mode requires a POSIX user runtime")
+        if state_dir is None:
+            xdg = os.environ.get("XDG_STATE_HOME")
+            if xdg:
+                base = Path(xdg).expanduser()
+                if not base.is_absolute():
+                    raise ValueError("XDG_STATE_HOME must be an absolute path")
+                state = base / "huc"
+            else:
+                home = os.environ.get("HOME")
+                if not home:
+                    raise RuntimeError("HOME or XDG_STATE_HOME must be configured")
+                state = Path(home).expanduser() / ".local" / "state" / "huc"
+        else:
+            state = Path(state_dir).expanduser()
+
+        state.mkdir(mode=0o700, parents=True, exist_ok=True)
+        info = state.lstat()
+        if stat.S_ISLNK(info.st_mode) or not stat.S_ISDIR(info.st_mode):
+            raise RuntimeError("HUC state path must be a real directory, not a symlink")
+        if info.st_uid != os.getuid():
+            raise PermissionError("HUC state directory must belong to the current user")
+        os.chmod(state, 0o700)
+        self.state_dir = state
+        self.database = state / "utxo.sqlite3"
+        self.registry = SingleUseUTXORegistry(self.database)
+
+    def permissions(self) -> dict[str, int]:
+        return {
+            "state_dir": stat.S_IMODE(self.state_dir.stat().st_mode),
+            "database": stat.S_IMODE(self.database.stat().st_mode),
+        }
+
+
 class SingleUseUTXORegistry:
     """SQLite atomic consume-once registry; all replicas need a consensus layer."""
     def __init__(self, database: str | Path):
         self.database = str(database)
+        db_path = Path(self.database)
+        db_path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+        if db_path.exists() or db_path.is_symlink():
+            info = db_path.lstat()
+            if stat.S_ISLNK(info.st_mode) or not stat.S_ISREG(info.st_mode):
+                raise RuntimeError("HUC database path must be a regular file, not a symlink")
+            if hasattr(os, "getuid") and info.st_uid != os.getuid():
+                raise PermissionError("HUC database must belong to the current user")
         with self._connect() as db:
             db.execute("PRAGMA journal_mode=WAL")
             db.execute("""CREATE TABLE IF NOT EXISTS consumed (
                 outpoint TEXT PRIMARY KEY, txid TEXT NOT NULL UNIQUE,
                 authorization_sha256 TEXT NOT NULL, consumed_at INTEGER NOT NULL
             )""")
+        if db_path.exists():
+            os.chmod(db_path, 0o600)
 
     def _connect(self):
         db = sqlite3.connect(self.database, timeout=15, isolation_level=None)
