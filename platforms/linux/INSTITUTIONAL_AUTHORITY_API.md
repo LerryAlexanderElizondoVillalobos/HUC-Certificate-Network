@@ -45,7 +45,7 @@ The consume row and evidence event share one SQLite transaction. After restart, 
 ## Security limitations before production
 
 - The mTLS trust CA and fingerprint enrollment are configuration trust inputs; secure their provisioning and change control.
-- X.509 path validation and revocation are not performed by the HTTP layer. The current adapter explicitly reports revocation `NOT_CHECKED`; production must integrate approved trust anchors, policy/path validation and fresh CRL/OCSP checks.
+- The HTTP layer now invokes a separate X.509 path/policy verifier before accepting a signer. CRL mode checks the configured chain using OpenSSL `-crl_check_all`; OCSP currently checks the leaf certificate only. Chain-wide OCSP, production responder policy, institutional trust-anchor/OID approval, and operational freshness monitoring remain required before production.
 - The first implementation is single-authority/single-host. High availability and federation are not included; do not run two independent authorities against copied databases.
 - Four test identities prove client separation in integration tests, not real-world institutional readiness.
 
@@ -60,7 +60,7 @@ The mTLS client certificate identifies the institution's API client. It is NOT t
 - `--revocation ocsp`: queries OCSP responder URLs in signed AIA; unavailable/unknown/revoked is rejected.
 - `--revocation both`: requires both CRL and OCSP to succeed.
 
-The OpenSSL verifier enforces path signatures, validity, strict X.509 constraints, security level 2, the configured certificate policy and full-chain CRL checking. This is still subject to deployment-specific policy review and does not establish that Costa Rica's public-sector PKI accepts the selected OID or trust roots.
+The OpenSSL verifier enforces path signatures, validity, strict X.509 constraints, security level 2, configured certificate policy and full-chain CRL checking when CRL mode is selected. OCSP currently validates only the leaf certificate and fails closed when no responder confirms `good`; it is not yet chain-wide. This verifier explicitly reports `production_ready: false`. Deployment-specific policy review is mandatory and this does not establish that Costa Rica's public-sector PKI accepts any selected OID or trust roots.
 
 ## Rollback-resistant recovery
 
