@@ -210,13 +210,19 @@ jobs:
     if: ${{ vars.HUC_PHYSICAL_DEVICE_RUNNER == 'enabled' }}
     needs: android-emulator-tests
     runs-on: [self-hosted, android, huc-device]
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/setup-java@v4
         with:
-          name: huc-android-api35-instrumentation
-          path: android-test-artifacts
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
       - name: Verify exactly one attached Android device
         shell: bash
         run: |
@@ -224,19 +230,9 @@ jobs:
           adb devices
           DEVICE_COUNT="$(adb devices | awk 'NR>1 && $2=="device" {count++} END {print count+0}')"
           test "$DEVICE_COUNT" -eq 1
-      - name: Install HUC SDK and instrumentation APKs
-        shell: bash
-        run: |
-          set -euo pipefail
-          find android-test-artifacts -type f -name '*.apk' -print
-          APP_APK="$(find android-test-artifacts -type f -name 'huc-direct-debug.apk' -print -quit)"
-          TEST_APK="$(find android-test-artifacts -type f -name 'huc-direct-debug-androidTest.apk' -print -quit)"
-          test -n "$APP_APK" && test -n "$TEST_APK"
-          adb install -r "$APP_APK"
-          adb install -r "$TEST_APK"
-      - name: Execute Android Keystore tests on attached physical device
-        shell: bash
-        run: adb shell am instrument -w org.bylaev.hucdirect.test/androidx.test.runner.AndroidJUnitRunner
+      - name: Execute HUC Android Keystore tests on physical device
+        working-directory: sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android
+        run: gradle --no-daemon :huc-direct:connectedDebugAndroidTest
       - name: Capture physical-device evidence
         if: always()
         shell: bash
@@ -250,6 +246,7 @@ jobs:
           path: |
             android-device-properties.txt
             android-device-logcat.txt
+            sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android/huc-direct/build/reports/androidTests/
           if-no-files-found: warn
 
   four-process-tls:
