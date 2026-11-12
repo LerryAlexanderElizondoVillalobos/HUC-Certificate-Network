@@ -45,7 +45,7 @@ jobs:
       - name: Install Linux implementation and test tools
         run: python -m pip install -e . pytest
       - name: Compile core
-        run: python -m compileall -q huc.py huc_bft.py huc_bft_peer.py huc_federation.py huc_membership.py huc_peer.py huc_replicated.py huc_view.py huc_x509_external.py
+        run: python -m compileall -q huc.py huc_bft.py huc_bft_peer.py huc_federation.py huc_membership.py huc_peer.py huc_replicated.py huc_view.py huc_x509_external.py huc_institutional_authority.py
       - name: Run Linux core suite
         run: python -m pytest -q tests --junitxml=linux-core.xml
       - name: Run Costa Rica external X.509 adapter tests
@@ -56,6 +56,8 @@ jobs:
         run: python -m unittest tests.test_four_institution_pilot -v
       - name: Run multi-process TLS cluster
         run: python -m unittest tests.test_bft_process_cluster -v
+      - name: Run institutional HTTPS and mTLS integration tests
+        run: python -m unittest tests.test_institutional_authority_api -v
       - name: Run synthetic funding sandbox
         run: python -m validation.run_funding_sandbox --output funding-evidence.json
       - uses: actions/upload-artifact@v4
