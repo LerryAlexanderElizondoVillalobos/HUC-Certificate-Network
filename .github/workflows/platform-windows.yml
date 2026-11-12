@@ -3,10 +3,10 @@ name: HUC Platform — Windows
 on:
   pull_request:
     branches: [main, validation/huc-0.8.0-multiplatform, architecture/modular-platform-monorepo]
-    paths: ['huc*.py', 'tests/**', 'validation/**', 'requirements.txt', 'pyproject.toml', 'platforms/windows/**', '.github/workflows/platform-windows.yml']
+    paths: ['platforms/windows/**', '.github/workflows/platform-windows.yml']
   push:
     branches: [main, validation/huc-0.8.0-multiplatform, architecture/modular-platform-monorepo]
-    paths: ['huc*.py', 'tests/**', 'validation/**', 'requirements.txt', 'pyproject.toml', 'platforms/windows/**', '.github/workflows/platform-windows.yml']
+    paths: ['platforms/windows/**', '.github/workflows/platform-windows.yml']
   workflow_dispatch:
 permissions:
   contents: read
