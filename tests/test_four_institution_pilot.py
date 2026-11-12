@@ -93,7 +93,7 @@ class FourInstitutionPilotRehearsal(unittest.TestCase):
         old_certificate = Path(issued["certificate_file"])
         renewal = self.root / "renew.proposal.json"
         fed.prepare_renew(
-            self.issuer, old_certificate, self.make_csr("HUC Institutional Pilot Renewed"),
+            self.issuer, old_certificate, self.make_csr("HUC Institutional Pilot"),
             renewal, days=90,
         )
         renewed = fed.finalize_proposal(
