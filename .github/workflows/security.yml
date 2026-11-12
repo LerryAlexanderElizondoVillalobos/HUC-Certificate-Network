@@ -1,29 +1,39 @@
-name: HUC Dependency Audit
+name: HUC Security Checks
 
 on:
   push:
-    branches: [main]
+    branches: [main, integration/huc-0.8.0]
   pull_request:
     branches: [main]
   schedule:
-    - cron: "23 4 * * 1"
+    - cron: "17 5 * * 1"
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  audit:
+  dependency-audit:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - name: Install project and audit tool
+          python-version: "3.13"
+      - name: Install pip-audit
+        run: python -m pip install --upgrade pip pip-audit
+      - name: Audit runtime dependencies
+        run: pip-audit -r requirements.txt
+
+  private-key-pattern-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan tracked text files for private key PEM blocks
+        shell: bash
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install -e .
-          python -m pip install pip-audit
-      - name: Audit installed dependencies
-        run: pip-audit
+          if git grep -n -I -E -- '-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----'; then
+            echo "Private key material detected in tracked text files."
+            exit 1
+          fi
