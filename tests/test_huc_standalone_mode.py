@@ -10,7 +10,7 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.x509.oid import NameOID
 
-from huc_x509_external import SingleUseUTXORegistry, create_single_use_authorization
+from huc_x509_external import LinuxUserRuntime, SingleUseUTXORegistry, create_single_use_authorization
 
 
 def make_identity():
@@ -30,6 +30,28 @@ def make_identity():
 
 
 class LinuxStandaloneModeTests(unittest.TestCase):
+    def test_linux_user_runtime_uses_private_user_state_permissions(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = Path(tmp) / "user-state" / "huc"
+            runtime = LinuxUserRuntime(state)
+            modes = runtime.permissions()
+            self.assertEqual(modes["state_dir"], 0o700)
+            self.assertEqual(modes["database"], 0o600)
+            self.assertTrue(runtime.database.exists())
+
+    def test_runtime_registry_persists_consumption_across_reopen(self):
+        cert, key = make_identity()
+        auth = create_single_use_authorization(cert, key, outpoint="persist:0",
+            operation="SIGN", resource_id="persistent-record",
+            expires_at=int(time.time()) + 600, nonce="persist-mode")
+        with tempfile.TemporaryDirectory() as tmp:
+            state = Path(tmp) / "state"
+            first = LinuxUserRuntime(state)
+            first.registry.consume(auth, cert)
+            second = LinuxUserRuntime(state)
+            with self.assertRaisesRegex(ValueError, "already consumed"):
+                second.registry.consume(auth, cert)
+
     def test_local_registry_works_without_any_node_configuration(self):
         cert, key = make_identity()
         auth = create_single_use_authorization(cert, key, outpoint="offline:0",
