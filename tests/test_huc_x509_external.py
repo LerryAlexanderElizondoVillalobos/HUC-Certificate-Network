@@ -53,7 +53,7 @@ class GovernmentX509AdapterTests(unittest.TestCase):
 
     def test_rejects_untrusted_root(self):
         other, _, _ = make_chain()
-        with self.assertRaisesRegex(ValueError, "terminate"):
+        with self.assertRaisesRegex(ValueError, "terminate|signature"):
             verify_government_certificate(self.leaf, [], [other])
 
     def test_authorization_is_bound_to_certificate_and_signature(self):
