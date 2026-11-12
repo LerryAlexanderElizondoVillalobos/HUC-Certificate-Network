@@ -9,6 +9,7 @@ import argparse
 import hashlib
 import json
 import os
+import tempfile
 import ssl
 import stat
 import sqlite3
@@ -39,6 +40,7 @@ class AuthorityStore:
                 raise RuntimeError("Database path must be a regular file, not a symlink")
             if hasattr(os, "getuid") and info.st_uid != os.getuid():
                 raise PermissionError("Database must belong to the service user")
+        self.anchor_path = self.path.with_suffix(self.path.suffix + ".anchor.json")
         with self._connect() as db:
             db.execute("PRAGMA journal_mode=WAL")
             db.execute("PRAGMA synchronous=FULL")
@@ -51,12 +53,55 @@ class AuthorityStore:
                 payload_json TEXT NOT NULL, previous_hash TEXT NOT NULL,
                 event_hash TEXT NOT NULL UNIQUE)""")
         os.chmod(self.path, 0o600)
+        self._verify_and_reconcile_anchor()
 
     def _connect(self):
         db = sqlite3.connect(self.path, timeout=20, isolation_level=None)
         db.execute("PRAGMA busy_timeout=20000")
         db.execute("PRAGMA synchronous=FULL")
         return db
+
+
+    def _atomic_write_anchor(self, sequence: int, head_hash: str) -> None:
+        self.anchor_path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+        payload = {"schema": "HUC-ROLLBACK-ANCHOR-1",
+                   "sequence": sequence, "head_hash": head_hash}
+        fd, temp_name = tempfile.mkstemp(prefix=".huc-anchor-", dir=self.anchor_path.parent)
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8") as stream:
+                json.dump(payload, stream, sort_keys=True, separators=(",", ":"))
+                stream.flush()
+                os.fsync(stream.fileno())
+            os.chmod(temp_name, 0o600)
+            os.replace(temp_name, self.anchor_path)
+            dir_fd = os.open(self.anchor_path.parent, os.O_RDONLY)
+            try:
+                os.fsync(dir_fd)
+            finally:
+                os.close(dir_fd)
+        finally:
+            if os.path.exists(temp_name):
+                os.unlink(temp_name)
+
+    def _verify_and_reconcile_anchor(self) -> None:
+        evidence = self.evidence()
+        if not evidence["event_chain_valid"]:
+            raise RuntimeError("Evidence chain is corrupt; authority startup refused")
+        sequence = evidence["event_count"]
+        head_hash = evidence["event_head_hash"]
+        if self.anchor_path.exists():
+            anchor = json.loads(self.anchor_path.read_text(encoding="utf-8"))
+            if anchor.get("schema") != "HUC-ROLLBACK-ANCHOR-1":
+                raise RuntimeError("Rollback anchor schema invalid; startup refused")
+            anchored_sequence = anchor.get("sequence")
+            anchored_hash = anchor.get("head_hash")
+            if not isinstance(anchored_sequence, int) or not isinstance(anchored_hash, str):
+                raise RuntimeError("Rollback anchor malformed; startup refused")
+            if sequence < anchored_sequence:
+                raise RuntimeError("Database rollback detected; authority startup refused")
+            if sequence == anchored_sequence and head_hash != anchored_hash:
+                raise RuntimeError("Database fork/rollback detected; authority startup refused")
+        self._atomic_write_anchor(sequence, head_hash)
 
     def consume(self, authorization: dict[str, Any], cert: x509.Certificate,
                 institution_id: str) -> dict[str, Any]:
@@ -97,6 +142,7 @@ class AuthorityStore:
             except Exception:
                 db.execute("ROLLBACK")
                 raise
+        self._atomic_write_anchor(seq, event_hash)
         return {"consumed": True, "single_use_enforced": True,
                 "institution_id": institution_id, "outpoint": outpoint,
                 "txid": txid, "event_hash": event_hash}
