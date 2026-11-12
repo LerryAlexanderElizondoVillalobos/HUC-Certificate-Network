@@ -1,8 +1,6 @@
 name: HUC 0.8.0 Multi-Platform Validation
 
 on:
-  push:
-    branches: [main, validation/huc-0.8.0-multiplatform]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -11,7 +9,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: huc-multiplatform-${{ github.ref }}
+  group: huc-multiplatform-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -199,6 +197,56 @@ jobs:
           path: |
             sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android/huc-direct/build/reports/androidTests/
             sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android/huc-direct/build/outputs/androidTest-results/
+            sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android/huc-direct/build/outputs/apk/debug/*.apk
+            sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android/huc-direct/build/outputs/apk/androidTest/debug/*.apk
+          if-no-files-found: warn
+
+
+  android-physical-device:
+    name: Android physical device — self-hosted
+    if: ${{ vars.HUC_PHYSICAL_DEVICE_RUNNER == 'enabled' }}
+    needs: android-emulator-tests
+    runs-on: [self-hosted, android, huc-device]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: huc-android-api35-instrumentation
+          path: android-test-artifacts
+      - name: Verify exactly one attached Android device
+        shell: bash
+        run: |
+          set -euo pipefail
+          adb devices
+          DEVICE_COUNT="$(adb devices | awk 'NR>1 && $2=="device" {count++} END {print count+0}')"
+          test "$DEVICE_COUNT" -eq 1
+      - name: Install HUC SDK and instrumentation APKs
+        shell: bash
+        run: |
+          set -euo pipefail
+          find android-test-artifacts -type f -name '*.apk' -print
+          APP_APK="$(find android-test-artifacts -type f -name 'huc-direct-debug.apk' -print -quit)"
+          TEST_APK="$(find android-test-artifacts -type f -name 'huc-direct-debug-androidTest.apk' -print -quit)"
+          test -n "$APP_APK" && test -n "$TEST_APK"
+          adb install -r "$APP_APK"
+          adb install -r "$TEST_APK"
+      - name: Execute Android Keystore tests on attached physical device
+        shell: bash
+        run: adb shell am instrument -w org.bylaev.hucdirect.test/androidx.test.runner.AndroidJUnitRunner
+      - name: Capture physical-device evidence
+        if: always()
+        shell: bash
+        run: |
+          adb shell getprop > android-device-properties.txt || true
+          adb logcat -d -t 12000 > android-device-logcat.txt || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: huc-android-physical-device-evidence
+          path: |
+            android-device-properties.txt
+            android-device-logcat.txt
           if-no-files-found: warn
 
   four-process-tls:
