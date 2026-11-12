@@ -1,0 +1,22 @@
+{
+  "payload": {
+    "certificate_serial_number": "29990767764291609524754842977234385345823504727",
+    "certificate_sha256_der": "6eff6ae41c79d7305f8e461117a39efa6760ef2fde5c9bd95233e40a59635d4e",
+    "consensus_certificate_id": "huc-cc:b46dcfacc9b73b83d990c553f27c2bcdf5b129aa621fce14db3ad22d632d5e3b",
+    "consensus_mode": "ISSUER_SIGNED_POLICY",
+    "initial_utxo_outpoint": {
+      "txid": "e10367d83d69ffdb9921977d8d88f5e4679063ed8b9389781272e2115dbd0be7",
+      "vout": 0
+    },
+    "issued_at_utc": "2026-11-12T03:56:23Z",
+    "issuer_id": "LAEV-DIRECT-DEMO",
+    "not_after_utc": "2027-11-12T03:56:23Z",
+    "operation": "ISSUE_OR_RENEW",
+    "policy_sha256": "8204b898e185a403e6e024b4c6eb5d4f9459b86fb0f62c79e8c0c45481ab514c",
+    "required_signatures": 1,
+    "utxo_sequence_at_issuance": 1
+  },
+  "signature": "Hh10v5zWGy1MtCRYbzGHEttThYdGslciM5XZGQW52u37FFzcrCZHrXM/UjW8AEnjAVBqs9dGtEYY611xAXEPAQ==",
+  "type": "LAEV-HUC-CC",
+  "version": "1"
+}

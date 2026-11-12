@@ -1,0 +1,9 @@
+{
+  "ca_certificate_der_sha256": "3b75182e311073e98d3441b88458fa7092205ac20cf492780c96dacaef814bc6",
+  "created_at_utc": "2026-11-12T03:56:23Z",
+  "issuer_id": "LAEV-DIRECT-DEMO",
+  "issuer_public_key_der_sha256": "fc8c73f6bd77ee863bedeadf5817936fe1b71fd2a42deaa0d7138ab1911de336",
+  "policy_sha256": "8204b898e185a403e6e024b4c6eb5d4f9459b86fb0f62c79e8c0c45481ab514c",
+  "schema": "LAEV-HUC-ANCHOR-1",
+  "version": "0.8.0"
+}

@@ -1,0 +1,21 @@
+LAEV HUC Direct SDK 0.8.0 — Build and verification status
+
+Python SDK:
+  - Python bytecode compilation: PASS
+  - Editable package install with local build dependencies: PASS
+  - Console command (huc-direct --help): PASS
+  - Unit and integration tests: 19 passed, 0 failed
+  - Wheel package built: laev_huc_direct-0.8.0-py3-none-any.whl
+  - Wheel import smoke test in isolated target: PASS
+  - FastAPI TestClient tests: PASS
+  - Public demo build and verification: PASS
+  - Public package private-key scan: PASS
+  - Complete SDK and public demo ZIP packaging: PASS
+
+Android SDK:
+  - Kotlin library and Gradle project source included.
+  - Android Keystore key/CSR, offline package verification, direct challenge signing and REST adapter source included.
+  - Not compiled in this environment: Android SDK and Gradle were unavailable.
+  - Required before production: Gradle build, instrumented tests across Android API levels and tests on physical OEM Keystore providers.
+
+No production certification or independent cryptographic audit is claimed.
