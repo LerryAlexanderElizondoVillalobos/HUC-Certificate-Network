@@ -16,5 +16,5 @@ dependencies = [
 [tool.setuptools]
 py-modules = [
   "huc", "huc_bft", "huc_bft_peer", "huc_federation",
-  "huc_membership", "huc_peer", "huc_replicated", "huc_view"
+  "huc_membership", "huc_peer", "huc_replicated", "huc_view", "huc_x509_external"
 ]
