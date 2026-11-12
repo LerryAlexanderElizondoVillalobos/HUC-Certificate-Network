@@ -20,6 +20,7 @@ from typing import Any
 
 from cryptography import x509
 from huc_x509_external import canonical, fingerprint, verify_single_use_authorization
+from huc_x509_policy import validate_certificate_policy
 
 ZERO = "0" * 64
 MAX_BODY = 64 * 1024
@@ -188,9 +189,13 @@ def load_client_registry(path: str | Path) -> dict[str, str]:
 def build_server(database: str | Path, cert_file: str | Path,
                  key_file: str | Path, client_ca_file: str | Path,
                  client_registry_file: str | Path, host: str = "127.0.0.1",
-                 port: int = 8443):
+                 port: int = 8443, trust_bundle: str | Path | None = None,
+                 crl_bundle: str | Path | None = None, policy_oid: str | None = None,
+                 revocation: str = "crl"):
     store = AuthorityStore(database)
     clients = load_client_registry(client_registry_file)
+    if trust_bundle is None or crl_bundle is None:
+        raise ValueError("Signer trust bundle and CRL bundle are mandatory; revocation must fail closed")
 
     class Handler(BaseHTTPRequestHandler):
         server_version = "HUC-Institutional-Authority/0.8.0"
@@ -240,7 +245,13 @@ def build_server(database: str | Path, cert_file: str | Path,
                 if length < 1 or length > MAX_BODY:
                     return self._json(413, {"error": "invalid_request_size"})
                 request = json.loads(self.rfile.read(length))
-                result = store.consume(request["authorization"], cert, institution)
+                signer_raw = request["signer_certificate_pem"].encode("utf-8")
+                signer_cert = x509.load_pem_x509_certificate(signer_raw)
+                chain = [x509.load_pem_x509_certificate(item.encode("utf-8"))
+                         for item in request.get("signer_chain_pem", [])]
+                validate_certificate_policy(signer_cert, chain, trust_bundle,
+                    crl_bundle=crl_bundle, policy_oid=policy_oid, revocation=revocation)
+                result = store.consume(request["authorization"], signer_cert, institution)
                 return self._json(201, result)
             except PermissionError as exc:
                 return self._json(403, {"error": str(exc)})
@@ -269,11 +280,16 @@ def main():
     parser.add_argument("--server-key", required=True)
     parser.add_argument("--client-ca", required=True)
     parser.add_argument("--client-registry", required=True)
+    parser.add_argument("--trust-bundle", required=True)
+    parser.add_argument("--crl-bundle", required=True)
+    parser.add_argument("--policy-oid")
+    parser.add_argument("--revocation", choices=["crl", "ocsp", "both"], default="crl")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8443)
     args = parser.parse_args()
     server = build_server(args.database, args.server_cert, args.server_key,
-        args.client_ca, args.client_registry, args.host, args.port)
+        args.client_ca, args.client_registry, args.host, args.port,
+        args.trust_bundle, args.crl_bundle, args.policy_oid, args.revocation)
     print(f"HUC authority listening on https://{args.host}:{args.port}")
     try:
         server.serve_forever()
