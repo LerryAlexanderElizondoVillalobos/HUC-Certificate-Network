@@ -25,31 +25,37 @@ def issue(subject, issuer, issuer_key, *, ca=False, server=False):
     key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, subject)])
     now = datetime.now(timezone.utc)
-    builder = (x509.CertificateBuilder().subject_name(name).issuer_name(issuer.subject if issuer else name)
+    issuer_name = issuer.subject if issuer else name
+    builder = (x509.CertificateBuilder().subject_name(name).issuer_name(issuer_name)
         .public_key(key.public_key()).serial_number(x509.random_serial_number())
         .not_valid_before(now-timedelta(minutes=2)).not_valid_after(now+timedelta(days=2))
         .add_extension(x509.BasicConstraints(ca=ca, path_length=1 if ca else None), critical=True)
-        .add_extension(x509.CertificatePolicies([x509.PolicyInformation(
-            ObjectIdentifier("1.2.3.4.5"), None)]), critical=False))
-    if not ca:
-        builder = builder.add_extension(x509.KeyUsage(digital_signature=True,
-            content_commitment=True, key_encipherment=True, data_encipherment=False,
-            key_agreement=False, key_cert_sign=False, crl_sign=False,
-            encipher_only=None, decipher_only=None), critical=True)
-    else:
+        .add_extension(x509.SubjectKeyIdentifier.from_public_key(key.public_key()), critical=False))
+    if issuer is not None:
+        builder = builder.add_extension(
+            x509.AuthorityKeyIdentifier.from_issuer_public_key(issuer_key.public_key()),
+            critical=False)
+    if ca:
         builder = builder.add_extension(x509.KeyUsage(digital_signature=False,
             content_commitment=False, key_encipherment=False, data_encipherment=False,
             key_agreement=False, key_cert_sign=True, crl_sign=True,
+            encipher_only=None, decipher_only=None), critical=True)
+    else:
+        builder = builder.add_extension(x509.KeyUsage(digital_signature=True,
+            content_commitment=True, key_encipherment=True, data_encipherment=False,
+            key_agreement=False, key_cert_sign=False, crl_sign=False,
             encipher_only=None, decipher_only=None), critical=True)
         eku = ExtendedKeyUsageOID.SERVER_AUTH if server else ExtendedKeyUsageOID.CLIENT_AUTH
         builder = builder.add_extension(x509.ExtendedKeyUsage([eku]), critical=False)
         if server:
             builder = builder.add_extension(x509.SubjectAlternativeName([
-                x509.DNSName("localhost"), x509.IPAddress(__import__("ipaddress").ip_address("127.0.0.1"))
+                x509.DNSName("localhost"),
+                x509.IPAddress(__import__("ipaddress").ip_address("127.0.0.1"))
             ]), critical=False)
+        builder = builder.add_extension(x509.CertificatePolicies([x509.PolicyInformation(
+            ObjectIdentifier("1.2.3.4.5"), None)]), critical=False)
     cert = builder.sign(issuer_key if issuer else key, hashes.SHA256())
     return cert, key
-
 
 def write_pem(path, data):
     path.write_bytes(data)
