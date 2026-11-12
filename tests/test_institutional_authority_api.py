@@ -17,6 +17,7 @@ from cryptography.x509.oid import ExtendedKeyUsageOID, NameOID, ObjectIdentifier
 
 from huc_institutional_authority import AuthorityStore, build_server
 from huc_x509_external import create_single_use_authorization, fingerprint
+from huc_x509_policy import validate_certificate_policy, X509PolicyError
 
 
 def issue(subject, issuer, issuer_key, *, ca=False, server=False):
@@ -185,6 +186,23 @@ class InstitutionalAuthorityAPITests(unittest.TestCase):
         shutil.copy2(snapshot, self.db)
         with self.assertRaisesRegex(RuntimeError, "rollback detected"):
             AuthorityStore(self.db)
+
+
+    def test_revoked_signer_certificate_is_rejected_by_crl(self):
+        revoked_cert, _ = issue("REVOKED_TEST_SIGNER", self.ca, self.ca_key)
+        from datetime import datetime, timedelta, timezone
+        now = datetime.now(timezone.utc)
+        revoked = (x509.RevokedCertificateBuilder()
+            .serial_number(revoked_cert.serial_number)
+            .revocation_date(now-timedelta(minutes=2)).build())
+        crl = (x509.CertificateRevocationListBuilder().issuer_name(self.ca.subject)
+            .last_update(now-timedelta(minutes=1)).next_update(now+timedelta(days=1))
+            .add_revoked_certificate(revoked).sign(self.ca_key, hashes.SHA256()))
+        revoked_crl = self.root/"revoked.crl"
+        write_pem(revoked_crl, crl.public_bytes(serialization.Encoding.PEM))
+        with self.assertRaises(X509PolicyError):
+            validate_certificate_policy(revoked_cert, [], self.ca_file,
+                crl_bundle=revoked_crl, policy_oid="1.2.3.4.5", revocation="crl")
 
     def test_untrusted_client_ca_is_not_accepted_by_tls(self):
         import ssl
