@@ -1,0 +1,8 @@
+{
+  "format": "LAEV-HUC-PACKAGE",
+  "version": "0.4.0",
+  "certificate_sha256_der": "9999b17fd14adb2b46beb28808c26febdbe30937a932a9e96ae06112e9b4c4a8",
+  "certificate_file": "certificate.pem",
+  "consensus_certificate_file": "consensus_certificate.json",
+  "private_keys_included": false
+}

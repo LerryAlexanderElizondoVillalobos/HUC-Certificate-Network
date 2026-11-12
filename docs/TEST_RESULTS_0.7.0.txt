@@ -1,0 +1,30 @@
+LAEV HUC 0.7.0 — TEST RESULTS
+
+Automated test suite:
+  Command: python -m unittest discover -s tests -v
+  Result: 61 tests passed, 0 failures, 0 errors.
+
+Integrated network demonstration:
+  Command: python demo/run_huc07.py
+  Result: completed successfully.
+
+Scenarios:
+  ISSUE: COMMITTED; all four validators returned votes.
+  VIEW_CHANGE: INSTALLED; primary changed from HUC-A to HUC-B with 3 signed view-change messages.
+  RENEW: COMMITTED; all four validators returned votes.
+  MEMBERSHIP_HANDOFF: ACTIVATED; HUC-A removed, HUC-E added; 4 old-committee votes collected; package staged over P2P at retained peers HUC-C and HUC-D; B/C/D activated and E joined the successor epoch.
+  REVOKE: COMMITTED; all four validators returned votes.
+
+Final state:
+  Members: HUC-B, HUC-C, HUC-D, HUC-E
+  Membership epoch: 1
+  Replicated sequence: 3 on all four replicas
+  Unique head hash count: 1
+  Original certificate status: SUPERSEDED
+  Renewed certificate status: REVOKED
+  Replicas agree: true
+
+Test scope and limitations:
+  TCP transport was exercised between four processes bound to loopback (127.0.0.1).
+  No physical cross-institution deployment, Internet routing, NAT traversal, packet-loss test, or production TLS deployment was performed.
+  HUC 0.7 View Change is conservative and is not a complete PBFT/HotStuff implementation.

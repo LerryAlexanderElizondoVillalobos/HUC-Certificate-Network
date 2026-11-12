@@ -1,24 +1,25 @@
-# HUC Certificate Specification — 0.1
+# HUC Certificate and Evidence Specification — 0.8.0
 
-## Encoding
+## Certificate layer: X.509
 
-UTF-8 JSON, sorted keys, compact separators and Unicode preserved.
+HUC uses X.509 for subject identity, public key, issuer, validity interval and CA signature. The holder's private key is generated and retained by the holder; the issuer receives a CSR, not the holder's private key.
 
-## Fields
+## Authorization layer: HUC-CC
 
-| Field | Meaning |
-|---|---|
-| schema | Format identifier: `huc-certificate/0.1` |
-| issuer | Base64-encoded raw Ed25519 public key |
-| subject | Subject reference; use test identifiers in this prototype |
-| claims | JSON object containing asserted attributes |
-| issued_at | UTC ISO-8601 issue time |
-| expires_at | Optional UTC ISO-8601 expiry |
-| certificate_id | SHA-256 of canonical unsigned payload |
-| signature | Base64 Ed25519 signature over canonical unsigned payload |
+HUC-CC is a signed protocol attestation that binds certificate evidence, issuer policy and the relevant logical UTXO outpoint/state. It is not a blockchain block and is not itself a BFT vote. Validators independently validate X.509 and HUC-CC before accepting an applicable state transition.
 
-## Verification
+## State layer: logical UTXO
 
-Reconstruct the unsigned payload, recompute the identifier and verify the Ed25519 signature. Expiry and ledger state are additional checks.
+ISSUE creates an active output. RENEW consumes/supersedes the previous active output and creates a successor output. REVOKE consumes the active output and records a revoked state. Sequence and head hashes bind the append-only state history.
 
-This is an experimental format, not a finalized interoperability standard. Schema evolution, claim vocabularies, issuer identifiers, key rotation and privacy rules remain open.
+## Replicated-state evidence
+
+CommitCertificates, prepared evidence and view-change certificates prove that a state transition passed the configured validator quorum. They are separate from the X.509 CA signature and HUC-CC issuer signature.
+
+## Verification requirements
+
+A verifier must validate the X.509 chain and validity, certificate DER hash, HUC-CC canonical hash/signatures/binding, trust anchor, UTXO state evidence and freshness policy. For BFT-backed state, it must also validate commit and view history against the pinned network manifest.
+
+## Interoperability status
+
+HUC 0.8.0 is an experimental implementation-specific format. Canonical JSON conventions, schema evolution, claim vocabularies, portable status proofs and cross-language test vectors require further standardization.

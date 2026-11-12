@@ -1,0 +1,124 @@
+{
+  "body": {
+    "committed_at_utc": "2026-11-12T03:28:20Z",
+    "network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+    "proposal": {
+      "payload": {
+        "action": "ISSUE",
+        "certificate_sha256": "1b20aa8dca41b9b59b2e0e55b8baba780e82d2cd8caf31e9b29aae920fb5b234",
+        "consensus_certificate_sha256": "b56b54f5e899d9eb3f50ff4d86f92a15e61eb0b4bd73e6ee8b4dfca4813d6f90",
+        "created_at_utc": "2026-11-12T03:28:20Z",
+        "epoch": 0,
+        "evidence": {
+          "certificate_pem_b64": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUR1VENDQWlHZ0F3SUJBZ0lVR3RIMDIwTFlzKzNJcVJ6dU5RMTBIWjV0VjRRd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0pERWlNQ0FHQTFVRUF3d1pURUZGVmlCSVZVTWdSR1Z0YjI1emRISmhkR2x2YmlCRFFUQWVGdzB5TmpFeApNVEl3TXpJek1qQmFGdzB5TnpBek1USXdNekk0TWpCYU1DY3hKVEFqQmdOVkJBTU1IRWhWUXlBd0xqY2dSR1Z0CmIyNXpkSEpoZEdsdmJpQkliMnhrWlhJd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUIKQVFEVXVFeGd5dldWMFNoS0JKaGk1SEQyRkNYd1cvVTlqOFlyK0dkNkt0NmhCaHJvbWRTTTFNcEMzeElOa1hRVwp0Mm9RQzI2SWtaQk5Hb2w3QUN2d0hyYlNyL1gxclNyaHo3QlhmN0dycTc2VmZibGl2M3ZFakR2dEVwaUx6OUJtCjhRa3dXc2tGZGNNa0V3RE5XdXBPNVZjdnFFZWdjcG5YL1BzMitXcmVWRVpYVkhLa2dkTjd2bWM3QU1QRWVjUGMKWW9nQmNuY2FBTkorT3FyWVhzWTBzQkgzblZNSzBrcldDZ3VpS0F1QnpDSGxqUzdDbXh3MHFoWFhLaUkyTHFDRgovaXl4UVhIQm9PeUpCUEMrUkxSZGtBTHQvakpPSlRibUtVaHVXMkpwRVRLZU9RL3hSRHFKR2RvQWhleW9KZFBrCmd2QlA3M1hDWWhxRmgzMnVXSVIvYzhMZEFnTUJBQUdqWURCZU1Bd0dBMVVkRXdFQi93UUNNQUF3SFFZRFZSME8KQkJZRUZMTFk2Q2NkNTZpdlVCaHZUeTFnMnBQZmRuR1FNQjhHQTFVZEl3UVlNQmFBRkRQR1hCVHVLNG44bGszMQppME0yaHcxM29CMXNNQTRHQTFVZER3RUIvd1FFQXdJRjREQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FZRUFLTWlzCkU5OWNid2tTS0t3OG9lMzcvTEZ2cklQYytXMGFhL0RwQ1V3c3JtSldPeWZpSm55QjNTTGFPN043bEp3VWNTUGQKUURjSFZUc1JDZWNGTnNBdWtGNTQwemZydUhCRk5yeXJoMC9kek0rbno4SDh0eWNzb3JiamJkQm8yTE1NNDBtQgpVc1BTQ05Tbll4dXlWUE5jUXJtdXF2dHJrR0xrbDBVRVZVcEtBM0RwdC9yVmptZy84OCsrcW02dU5MNnZwSDJ3Cmh5R0RLV1RYbXIzMVIvRExLaVRud3NuYXE2SC9WaWwyZWJBR28ydDh4THhyd0ZNdzdIVUw3cmNCZ0xhSURXTWsKVUlpK09BaXNYQ0dIZzhnR2w3ci9NVHArRERqbnNmT1o5c3I4WDBxelZGVU0zNW5QMjJudzhRS29ycitBaktrWQo5OGgwNGQzUkJFVlJRRTRmQ3JSZmpOWVdtbUhCc2ZHZU16MTdPZDMyZHZoeGdQZHRUMWUyckdkVm93c2UzeHlQCk5TSDdLVVVDL3luUkIvQkJaaDdmcVM1SjhQelhyancwTHdvbWgyRHhqWDVDZ0dHUFhXSktNZFR2dE0wTUx0b3QKWUFLZ285Ry91VDVIWGYxRStnS1lPajdZMlpZMzh1WGFuSkxseW5aTGUrRzNEdStCMktEWkZuWWdSQUVNCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K",
+          "consensus_certificate": {
+            "payload": {
+              "authority_count": 3,
+              "authorized_state_at_issuance": "ACTIVE",
+              "certificate_serial_number": "153115945796372666286090967609509731976554043268",
+              "certificate_sha256_der": "1b20aa8dca41b9b59b2e0e55b8baba780e82d2cd8caf31e9b29aae920fb5b234",
+              "consensus_certificate_id": "huc-cc:26415088bd7bef45c4e0c3d6ae3add468705df01c467dacfbf7933d6af1adc07",
+              "consensus_mode": "MULTI_SIGNATURE",
+              "initial_utxo_outpoint": {
+                "txid": "ba324967d448f594e40e2c25961c981da9f11574ab3f823dc7c7d67200f32ad6",
+                "vout": 0
+              },
+              "issued_at_utc": "2026-11-12T03:28:20Z",
+              "not_after_utc": "2027-03-12T03:28:20Z",
+              "operation": "ISSUE",
+              "policy_id": "HUC-2-OF-3",
+              "policy_sha256": "42af1e8c337e94b3b3678c6beb1ec1a001fccf420d0e725fef0cd57236c356f1",
+              "threshold": 2,
+              "utxo_sequence_at_issuance": 0
+            },
+            "signatures": [
+              {
+                "authority_id": "HUC-AUTH-01",
+                "signature": "Dw2aaa0v/9JBPsvDXQLRLodKUZmAAyZf5AN7/yu4JvBJlMAz2mpcGww/JT/77VrafyBTIZFh8SCael0m37avDg=="
+              },
+              {
+                "authority_id": "HUC-AUTH-02",
+                "signature": "15KZAG70CLzEqEvkjt/xNdQ5URZucR8OOgYgCxz9lLvcVxezsgaawzFz7iKWFqxMO1iKfYA+3QmXLWmYeDCyAQ=="
+              }
+            ],
+            "type": "LAEV-HUC-CC",
+            "version": "1"
+          }
+        },
+        "expires_at_utc": "2026-11-12T03:38:20Z",
+        "metadata": {},
+        "network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+        "previous_certificate_sha256": null,
+        "previous_outpoint": null,
+        "previous_state_hash": "2888e306a04df9dbc4a4508742eb37f1e9af90fc3d83ec4e123a5a260230cd50",
+        "proposer_id": "HUC-A",
+        "schema": "LAEV-HUC-RSP-PROPOSAL-1",
+        "sequence": 1,
+        "view": 0,
+        "view_certificate_id": null
+      },
+      "proposal_id": "8d7ad22329a132d928b68f73447629dbc4f3743b4775d5880db29c5f0b23947c"
+    },
+    "quorum": 3,
+    "schema": "LAEV-HUC-RSP-COMMIT-1",
+    "votes": [
+      {
+        "payload": {
+          "decision": "APPROVE",
+          "epoch": 0,
+          "network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+          "previous_state_hash": "2888e306a04df9dbc4a4508742eb37f1e9af90fc3d83ec4e123a5a260230cd50",
+          "proposal_id": "8d7ad22329a132d928b68f73447629dbc4f3743b4775d5880db29c5f0b23947c",
+          "schema": "LAEV-HUC-RSP-VOTE-1",
+          "sequence": 1,
+          "validator_id": "HUC-A",
+          "voted_at_utc": "2026-11-12T03:28:20Z"
+        },
+        "signature": "JEAaXJktfkZpCs0Xh6mZpCwYrYaeJTyDFmdlDqemlP8zNBcGDUulL1xIe2YDC2ahvVUzUljqfTJBRTMkPX69BA=="
+      },
+      {
+        "payload": {
+          "decision": "APPROVE",
+          "epoch": 0,
+          "network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+          "previous_state_hash": "2888e306a04df9dbc4a4508742eb37f1e9af90fc3d83ec4e123a5a260230cd50",
+          "proposal_id": "8d7ad22329a132d928b68f73447629dbc4f3743b4775d5880db29c5f0b23947c",
+          "schema": "LAEV-HUC-RSP-VOTE-1",
+          "sequence": 1,
+          "validator_id": "HUC-B",
+          "voted_at_utc": "2026-11-12T03:28:20Z"
+        },
+        "signature": "yETO0Jq6MVJIhtm5jTKUN20nMtA/zITZuYT5vR5c/ZrmTqbQ5JWtDTJE/XA4SHQWis4Anz9zDZP3sXycQOooBg=="
+      },
+      {
+        "payload": {
+          "decision": "APPROVE",
+          "epoch": 0,
+          "network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+          "previous_state_hash": "2888e306a04df9dbc4a4508742eb37f1e9af90fc3d83ec4e123a5a260230cd50",
+          "proposal_id": "8d7ad22329a132d928b68f73447629dbc4f3743b4775d5880db29c5f0b23947c",
+          "schema": "LAEV-HUC-RSP-VOTE-1",
+          "sequence": 1,
+          "validator_id": "HUC-C",
+          "voted_at_utc": "2026-11-12T03:28:20Z"
+        },
+        "signature": "zTpqQ87FDbIIhJvTAiXcsWeHaMFXNCKuMYSet53v/hcvEp1e6Z5hm1tws5AAbuNdj1Reu1miu+jOxvmiFOa6AQ=="
+      },
+      {
+        "payload": {
+          "decision": "APPROVE",
+          "epoch": 0,
+          "network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+          "previous_state_hash": "2888e306a04df9dbc4a4508742eb37f1e9af90fc3d83ec4e123a5a260230cd50",
+          "proposal_id": "8d7ad22329a132d928b68f73447629dbc4f3743b4775d5880db29c5f0b23947c",
+          "schema": "LAEV-HUC-RSP-VOTE-1",
+          "sequence": 1,
+          "validator_id": "HUC-D",
+          "voted_at_utc": "2026-11-12T03:28:20Z"
+        },
+        "signature": "4P9wxTQK89HF7cqz/ouZbjiN+2BJoDVVCODyf6WBxApwxm8neuUbagd4UOLH80Z6j3+oKh3LyWjem9FpdBDUBw=="
+      }
+    ]
+  },
+  "commit_id": "fc5c750a170533c2a361ef16cd2ff632c728f8107724820497fcf3043aa3adeb"
+}

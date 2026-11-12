@@ -1,0 +1,9 @@
+{
+  "ca_certificate_der_sha256": "6257bc498b9f4c426f8754d4ce2cdd6aba4aadb6997371204fd93109b62c6177",
+  "consensus_policy_id": "HUC-2-OF-3",
+  "consensus_policy_sha256": "0120df14e74acd6122991d323cfbb757e1dc87927685630ace3a7fb5a6fe8e6e",
+  "created_at_utc": "2026-11-12T02:17:14Z",
+  "ledger_public_key_der_sha256": "a2a8fe88dd67606c8fad82341d4962c9cf036c2f38651fe6c760c4ce8e19b682",
+  "protocol_version": "0.4.0",
+  "schema": "LAEV-HUC-TRUST-ANCHOR-1"
+}

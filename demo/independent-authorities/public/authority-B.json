@@ -1,0 +1,13 @@
+{
+  "algorithm": "Ed25519",
+  "authority_id": "INSTITUTION-B",
+  "created_at_utc": "2026-11-12T02:39:11Z",
+  "permissions": [
+    "ISSUE",
+    "RENEW",
+    "REVOKE"
+  ],
+  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAnkcHdPGPwT+bmDX/Tsq3aXda4+I5T/tJ2OFKyLb8VCk=\n-----END PUBLIC KEY-----\n",
+  "public_key_sha256": "1870430b838bc6a3ca18fd118057e4d8281bfbc65cbf9a0303e2941dbce2a870",
+  "schema": "LAEV-HUC-AUTHORITY-1"
+}

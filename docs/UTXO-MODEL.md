@@ -1,24 +1,21 @@
-# HUC UTXO Model — Prototype 0.1
+# HUC Logical UTXO Model — 0.8.0
 
-## Outputs
+HUC uses a logical unspent-output state model for certificate lifecycle. It does not transfer currency and is not a blockchain.
 
-- Active certificate output: `<certificate_id>:0`
-- Revocation output: `<certificate_id>:revocation`
+## Lifecycle
 
-## State transitions
+- **ISSUE:** creates the first active certificate output.
+- **RENEW:** consumes/supersedes the prior active output and creates a successor output linked to the prior outpoint.
+- **REVOKE:** consumes the active output and records the revoked terminal state.
 
-1. **Issue** validates the certificate signature and creates one active output.
-2. **Revoke** consumes the active output and creates a revocation output.
-3. A consumed output is removed from the unspent set and cannot be consumed again.
-4. Verification succeeds only when the referenced output is active, the signature is valid and the certificate is not expired.
+## State integrity
 
-## Invariants
+Each accepted transition is bound to a sequence and parent/head hash. In replicated mode, a transition is applied only after a valid CommitCertificate and local revalidation. State export/sync reconstructs and verifies committed history and rejects rollback or forks.
 
-- An output can be consumed at most once.
-- Only a validly signed certificate can be issued.
-- A certificate identifier cannot be issued twice to the same ledger instance.
-- Revoked outputs are not valid certificate outputs.
+## Double-consumption and equivocation
 
-## Not specified yet
+The state machine rejects attempts to consume an already spent output. BFT validators persist votes and prepared locks to prevent conflicting signatures for the same consensus slot. Durable production storage must protect these records against rollback.
 
-Persistent storage, global uniqueness, transaction serialization, concurrent spends, consensus, network synchronization and portable proofs of state. This implementation is not a distributed UTXO network.
+## Important distinction
+
+A local standalone ledger and a replicated BFT ledger have different trust and freshness properties. Offline verification can only evaluate the signed state evidence available to it; it cannot discover a later revocation without updated evidence.

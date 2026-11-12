@@ -1,0 +1,68 @@
+{
+  "protocol": "LAEV-HUC/0.7",
+  "transport": "signed TCP over loopback",
+  "blockchain": false,
+  "token": false,
+  "payment_per_transaction": false,
+  "scenarios": [
+    {
+      "name": "ISSUE",
+      "result": "COMMITTED",
+      "votes": 4,
+      "sequence": 1
+    },
+    {
+      "name": "VIEW_CHANGE",
+      "result": "INSTALLED",
+      "view": 1,
+      "new_primary": "HUC-B",
+      "quorum_messages": 3
+    },
+    {
+      "name": "RENEW",
+      "result": "COMMITTED",
+      "votes": 4,
+      "sequence": 2
+    },
+    {
+      "name": "MEMBERSHIP_HANDOFF",
+      "result": "ACTIVATED",
+      "removed": "HUC-A",
+      "added": "HUC-E",
+      "old_quorum_signatures": 4,
+      "membership_package_staged_over_p2p": [
+        "HUC-C",
+        "HUC-D"
+      ],
+      "membership_epoch": 1,
+      "preserved_sequence": 2,
+      "replicas_agree": true
+    },
+    {
+      "name": "REVOKE",
+      "result": "COMMITTED",
+      "votes": 4,
+      "sequence": 3
+    }
+  ],
+  "final_state": {
+    "validator_ids": [
+      "HUC-B",
+      "HUC-C",
+      "HUC-D",
+      "HUC-E"
+    ],
+    "membership_epoch": 1,
+    "sequence_values": [
+      3
+    ],
+    "head_hash_count": 1,
+    "old_certificate_states": [
+      "SUPERSEDED"
+    ],
+    "new_certificate_states": [
+      "REVOKED"
+    ],
+    "replicas_agree": true
+  }
+}

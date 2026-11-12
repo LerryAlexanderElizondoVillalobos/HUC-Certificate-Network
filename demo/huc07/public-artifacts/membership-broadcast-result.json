@@ -1,0 +1,15 @@
+{
+  "activation_note": "Retained nodes activate the staged package locally; the incoming member joins with the same certified package through an authenticated invitation channel.",
+  "membership_certificate_id": "7cbbef8a0fa523615467c11af6c965fab69b66576fd57933bd842b77b0adeaf2",
+  "package": "/tmp/huc07-lab-7j305w2f/membership-package.json",
+  "quorum": 3,
+  "result": "membership_certified_and_distributed",
+  "stage_errors": {},
+  "staged_on": [
+    "HUC-C",
+    "HUC-D"
+  ],
+  "target_network_id": "062d9a7964413e7fab464e15f361e2c7f599633d73c8db3530653e34528477c8",
+  "vote_errors": {},
+  "votes_collected": 4
+}

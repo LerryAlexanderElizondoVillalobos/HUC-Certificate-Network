@@ -1,0 +1,16 @@
+{
+  "descriptor": {
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAh/JMJ8yeKLkbB/GPUDC5CmMfQ2BFOEhp++WjMVY7Z9I=\n-----END PUBLIC KEY-----\n",
+    "public_key_sha256": "9c0bb1f113d1200d9db01fa9ec4012f46fc6858a069907e29a26ad7d4347bcdd",
+    "validator_id": "HUC-E"
+  },
+  "payload": {
+    "created_at_utc": "2026-11-12T03:28:20Z",
+    "network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+    "nonce": "afc51a483cea00954ce0ff56389d68fa9965298dddeb6b3a944e460c6d9852da",
+    "public_key_sha256": "9c0bb1f113d1200d9db01fa9ec4012f46fc6858a069907e29a26ad7d4347bcdd",
+    "schema": "LAEV-HUC-MEMBERSHIP-JOIN-REQUEST-1",
+    "validator_id": "HUC-E"
+  },
+  "signature": "EgOT0iUjejaiPH41wXe9JQ2rHQEZBYQtgvYRsmM4IL74i7XV6Rdz9Jj4GSxCuDYsPwD89XmUy7J/v9ya+ZQLDw=="
+}

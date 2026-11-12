@@ -1,0 +1,25 @@
+{
+  "endpoints": {
+    "HUC-A": {
+      "host": "127.0.0.1",
+      "port": 49843
+    },
+    "HUC-B": {
+      "host": "127.0.0.1",
+      "port": 54467
+    },
+    "HUC-C": {
+      "host": "127.0.0.1",
+      "port": 48893
+    },
+    "HUC-D": {
+      "host": "127.0.0.1",
+      "port": 47999
+    }
+  },
+  "network_id": "68c148491428d4767b7584ba4ebb36ab3997a47f9d821b479b7c327a1cf4e1d7",
+  "network_sha256": "6dede0724cab036426a620fd7003eef5e57816d8bcbd8c38587caeca2ab1e8af",
+  "peer_map_sha256": "c5028ea00d66af1477c98e65c6237080eb42719d7a4f764db3231d556c796c22",
+  "protocol_version": "0.7.0",
+  "schema": "LAEV-HUC-PEER-MAP-1"
+}
