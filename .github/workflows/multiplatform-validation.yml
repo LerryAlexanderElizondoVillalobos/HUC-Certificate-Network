@@ -1,0 +1,305 @@
+name: HUC 0.8.0 Multi-Platform Validation
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: huc-multiplatform-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core-matrix:
+    name: Core — ${{ matrix.os }} / Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install HUC and test runner
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e . pytest
+      - name: Compile HUC source
+        run: python -m compileall -q huc.py huc_bft.py huc_bft_peer.py huc_federation.py huc_membership.py huc_peer.py huc_replicated.py huc_view.py
+      - name: Run portable core tests (cluster test is Linux-only)
+        run: python -m pytest -q tests --ignore=tests/test_bft_process_cluster.py --junitxml=core-results.xml
+      - name: Upload core test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: huc-core-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: core-results.xml
+          if-no-files-found: warn
+
+  direct-sdk-matrix:
+    name: Direct SDK — ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/python/pyproject.toml
+      - name: Install Direct SDK with API and test extras
+        working-directory: sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/python
+        run: python -m pip install -e ".[api,test]"
+      - name: Run Direct SDK tests
+        working-directory: sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0
+        run: python -m pytest -q tests --junitxml=direct-sdk-results.xml
+      - name: Upload Direct SDK test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: huc-direct-sdk-${{ matrix.os }}
+          path: sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/direct-sdk-results.xml
+          if-no-files-found: warn
+
+  android-sdk-build:
+    name: Android SDK — Gradle compile
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - name: Install Android Platform 35 and Build Tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDKMANAGER="$(command -v sdkmanager)"
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" --install "platforms;android-35" "build-tools;35.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+      - name: Compile HUC Android library and sample app
+        working-directory: sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android
+        run: gradle --no-daemon :huc-direct:assembleDebug :sample:assembleDebug
+      - name: Upload Android build outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: huc-android-sdk-build
+          path: |
+            sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android/huc-direct/build/outputs/aar/*.aar
+            sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android/sample/build/outputs/apk/debug/*.apk
+          if-no-files-found: warn
+
+
+  bft-windows-regression:
+    name: BFT view-change regression — Windows
+    runs-on: windows-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install HUC and pytest
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e . pytest
+      - name: Repeat Windows BFT view-change and prepared recovery
+        run: python -m pytest -q tests/test_bft_peer.py -k view_change_and_prepared_recovery_over_tcp --junitxml=bft-windows-results.xml
+      - name: Upload Windows BFT report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: huc-bft-windows-py${{ matrix.python-version }}
+          path: bft-windows-results.xml
+          if-no-files-found: warn
+
+  funding-sandbox-matrix:
+    name: Funding sandbox — ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Run synthetic funding lifecycle tests
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e . pytest
+          python -m pytest -q tests/test_funding_sandbox.py --junitxml=funding-sandbox-results.xml
+          python -m validation.run_funding_sandbox --output funding-sandbox-evidence.json
+      - name: Upload funding sandbox evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: huc-funding-sandbox-${{ matrix.os }}
+          path: |
+            funding-sandbox-results.xml
+            funding-sandbox-evidence.json
+          if-no-files-found: warn
+
+  android-emulator-tests:
+    name: Android Keystore instrumentation — API 35 emulator
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - name: Install emulator and API 35 system image
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDKMANAGER="$(command -v sdkmanager)"
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" --install "emulator"
+          "$SDKMANAGER" --install "system-images;android-35;google_apis;x86_64"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+      - name: Run HUC Android instrumentation tests on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          force-avd-creation: true
+          emulator-boot-timeout: 600
+          disable-animations: true
+          emulator-options: >-
+            -no-window
+            -no-audio
+            -no-boot-anim
+            -no-snapshot
+            -wipe-data
+            -gpu swiftshader_indirect
+          script: |
+            adb wait-for-device
+            adb shell getprop sys.boot_completed | grep -q 1
+            cd sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android
+            gradle --no-daemon :huc-direct:connectedDebugAndroidTest
+      - name: Capture emulator diagnostics
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p android-emulator-diagnostics
+          adb devices -l > android-emulator-diagnostics/adb-devices.txt 2>&1 || true
+          adb -s emulator-5554 shell getprop > android-emulator-diagnostics/getprop.txt 2>&1 || true
+          adb -s emulator-5554 logcat -d -t 5000 > android-emulator-diagnostics/logcat.txt 2>&1 || true
+          ps -ef | grep -E '[e]mulator|[q]emu' > android-emulator-diagnostics/processes.txt 2>&1 || true
+      - name: Upload emulator diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: huc-android-emulator-diagnostics
+          path: android-emulator-diagnostics/
+          if-no-files-found: warn
+      - name: Upload Android instrumentation reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: huc-android-api35-instrumentation
+          path: |
+            sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android/huc-direct/build/reports/androidTests/
+            sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android/huc-direct/build/outputs/androidTest-results/
+            sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android/huc-direct/build/outputs/apk/debug/*.apk
+            sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android/huc-direct/build/outputs/apk/androidTest/debug/*.apk
+          if-no-files-found: warn
+
+
+  android-physical-device:
+    name: Android physical device — self-hosted
+    if: ${{ vars.HUC_PHYSICAL_DEVICE_RUNNER == 'enabled' }}
+    needs: android-emulator-tests
+    runs-on: [self-hosted, android, huc-device]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+      - name: Verify exactly one attached Android device
+        shell: bash
+        run: |
+          set -euo pipefail
+          adb devices
+          DEVICE_COUNT="$(adb devices | awk 'NR>1 && $2=="device" {count++} END {print count+0}')"
+          test "$DEVICE_COUNT" -eq 1
+      - name: Execute HUC Android Keystore tests on physical device
+        working-directory: sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android
+        run: gradle --no-daemon :huc-direct:connectedDebugAndroidTest
+      - name: Capture physical-device evidence
+        if: always()
+        shell: bash
+        run: |
+          adb shell getprop > android-device-properties.txt || true
+          adb logcat -d -t 12000 > android-device-logcat.txt || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: huc-android-physical-device-evidence
+          path: |
+            android-device-properties.txt
+            android-device-logcat.txt
+            sdk/direct/LAEV_HUC_Direct_SDK_v0.8.0/android/huc-direct/build/reports/androidTests/
+          if-no-files-found: warn
+
+  four-process-tls:
+    name: Four-process TLS cluster (Linux)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install HUC dependencies
+        run: python -m pip install -e .
+      - name: Run four-process TLS cluster
+        run: python -m unittest tests.test_bft_process_cluster -v

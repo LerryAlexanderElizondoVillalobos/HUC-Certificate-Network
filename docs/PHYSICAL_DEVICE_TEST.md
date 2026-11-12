@@ -401,3 +401,21 @@ Conserva los logs de los cuatro dispositivos y sus hashes. Ejecuta estas pruebas
 - Ninguna clave privada HUC o TLS compartida entre instituciones.
 
 El acta de prueba debe documentar sistema operativo, Python, versiones del paquete, topología, latencia, pérdida de paquetes, secuencias, hashes finales y logs. Solo después de completar este procedimiento puede declararse superada la prueba en dispositivos físicos.
+
+
+## 15. Android physical-device instrumentation
+
+The hosted Android emulator job validates a virtual API 35 device. A physical-device run requires a self-hosted GitHub Actions runner on a workstation with Android Platform Tools and one USB-connected Android device with USB debugging authorized.
+
+To enable the optional physical-device job:
+
+1. Register a self-hosted runner for this repository on the workstation connected to the phone.
+2. Add the labels `android` and `huc-device` to that runner.
+3. In repository Settings → Secrets and variables → Actions → Variables, create `HUC_PHYSICAL_DEVICE_RUNNER` with value `enabled`.
+4. Confirm `adb devices` shows exactly one authorized device.
+5. Open PR #2 or dispatch the validation workflow. The physical-device job installs the Android test APK and runs the Keystore instrumentation test.
+6. Download and retain the `huc-android-physical-device-evidence` artifact.
+
+This job is conditional and will be skipped until the repository variable is enabled. A skipped job is not a physical-device PASS. Record device manufacturer/model, Android release/build, security patch level, hardware-backed Keystore availability, and test result in the test acta.
+
+Do not expose the self-hosted runner to untrusted pull requests. Use a dedicated machine, least-privilege runner account, no production secrets, and remove the runner when the test campaign is complete.
