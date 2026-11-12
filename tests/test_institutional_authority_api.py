@@ -13,7 +13,7 @@ from pathlib import Path
 from cryptography import x509
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.x509.oid import ExtendedKeyUsageOID, NameOID
+from cryptography.x509.oid import ExtendedKeyUsageOID, NameOID, ObjectIdentifier
 
 from huc_institutional_authority import AuthorityStore, build_server
 from huc_x509_external import create_single_use_authorization, fingerprint
@@ -27,11 +27,18 @@ def issue(subject, issuer, issuer_key, *, ca=False, server=False):
     builder = (x509.CertificateBuilder().subject_name(name).issuer_name(issuer.subject if issuer else name)
         .public_key(key.public_key()).serial_number(x509.random_serial_number())
         .not_valid_before(now-timedelta(minutes=2)).not_valid_after(now+timedelta(days=2))
-        .add_extension(x509.BasicConstraints(ca=ca, path_length=1 if ca else None), critical=True))
+        .add_extension(x509.BasicConstraints(ca=ca, path_length=1 if ca else None), critical=True)
+        .add_extension(x509.CertificatePolicies([x509.PolicyInformation(
+            ObjectIdentifier("1.2.3.4.5"), None)]), critical=False))
     if not ca:
         builder = builder.add_extension(x509.KeyUsage(digital_signature=True,
             content_commitment=True, key_encipherment=True, data_encipherment=False,
             key_agreement=False, key_cert_sign=False, crl_sign=False,
+            encipher_only=None, decipher_only=None), critical=True)
+    else:
+        builder = builder.add_extension(x509.KeyUsage(digital_signature=False,
+            content_commitment=False, key_encipherment=False, data_encipherment=False,
+            key_agreement=False, key_cert_sign=True, crl_sign=True,
             encipher_only=None, decipher_only=None), critical=True)
         eku = ExtendedKeyUsageOID.SERVER_AUTH if server else ExtendedKeyUsageOID.CLIENT_AUTH
         builder = builder.add_extension(x509.ExtendedKeyUsage([eku]), critical=False)
@@ -81,7 +88,7 @@ class InstitutionalAuthorityAPITests(unittest.TestCase):
         self.db = self.root/"authority.sqlite3"
         self.server = build_server(self.db, self.server_cert_file, self.server_key_file,
                                    self.ca_file, self.registry_file, "127.0.0.1", 0,
-                                   self.ca_file, self.crl_file, None, "crl")
+                                   self.ca_file, self.crl_file, "1.2.3.4.5", "crl")
         self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         self.thread.start()
         self.url = f"https://127.0.0.1:{self.server.server_port}"
