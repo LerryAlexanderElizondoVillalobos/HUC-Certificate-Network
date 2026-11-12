@@ -2,7 +2,7 @@ name: HUC Platform — Linux
 
 on:
   pull_request:
-    branches: [main, validation/huc-0.8.0-multiplatform, architecture/modular-platform-monorepo, feature/huc-institutional-authority-api]
+    branches: [main, validation/huc-0.8.0-multiplatform, architecture/modular-platform-monorepo, feature/huc-institutional-authority-api, feature/huc-080-government-x509]
     paths:
       - 'huc*.py'
       - 'tests/**'
@@ -12,7 +12,7 @@ on:
       - 'platforms/linux/**'
       - '.github/workflows/platform-linux.yml'
   push:
-    branches: [main, validation/huc-0.8.0-multiplatform, architecture/modular-platform-monorepo]
+    branches: [main, validation/huc-0.8.0-multiplatform, architecture/modular-platform-monorepo, feature/huc-institutional-authority-api]
     paths:
       - 'huc*.py'
       - 'tests/**'
@@ -45,7 +45,7 @@ jobs:
       - name: Install Linux implementation and test tools
         run: python -m pip install -e . pytest
       - name: Compile core
-        run: python -m compileall -q huc.py huc_bft.py huc_bft_peer.py huc_federation.py huc_membership.py huc_peer.py huc_replicated.py huc_view.py huc_x509_external.py huc_institutional_authority.py
+        run: python -m compileall -q huc.py huc_bft.py huc_bft_peer.py huc_federation.py huc_membership.py huc_peer.py huc_replicated.py huc_view.py huc_x509_external.py huc_institutional_authority.py huc_x509_policy.py
       - name: Run Linux core suite
         run: python -m pytest -q tests --junitxml=linux-core.xml
       - name: Run Costa Rica external X.509 adapter tests
