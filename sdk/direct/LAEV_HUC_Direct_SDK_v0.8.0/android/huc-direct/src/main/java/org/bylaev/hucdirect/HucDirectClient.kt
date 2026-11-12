@@ -139,7 +139,7 @@ object HucDirectClient {
         require(anchor.optString("policy_sha256") == hex(sha256(canonical(policy)))) { "Policy not pinned" }
         require(anchor.optString("issuer_id") == policy.optString("issuer_id")) { "Issuer mismatch" }
         require(policy.optString("consensus_mode") == "ISSUER_SIGNED_POLICY" && policy.optInt("required_signatures") == 1) { "Unsupported HUC-CC mode" }
-        require(cert.issuer == ca.subject) { "X.509 issuer mismatch" }
+        require(cert.issuerX500Principal == ca.subjectX500Principal) { "X.509 issuer mismatch" }
         cert.verify(ca.publicKey)
         require(cert.basicConstraints < 0) { "End-entity certificate cannot be CA" }
         val ccPayload = cc.optJSONObject("payload") ?: error("HUC-CC payload missing")
