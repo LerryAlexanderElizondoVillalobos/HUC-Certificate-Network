@@ -1,0 +1,62 @@
+name: HUC Platform — Linux
+
+on:
+  pull_request:
+    branches: [main, validation/huc-0.8.0-multiplatform, architecture/modular-platform-monorepo]
+    paths:
+      - 'huc*.py'
+      - 'tests/**'
+      - 'validation/**'
+      - 'requirements.txt'
+      - 'pyproject.toml'
+      - 'platforms/linux/**'
+      - '.github/workflows/platform-linux.yml'
+  push:
+    branches: [main, validation/huc-0.8.0-multiplatform, architecture/modular-platform-monorepo]
+    paths:
+      - 'huc*.py'
+      - 'tests/**'
+      - 'validation/**'
+      - 'requirements.txt'
+      - 'pyproject.toml'
+      - 'platforms/linux/**'
+      - '.github/workflows/platform-linux.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: huc-linux-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux-core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install Linux implementation and test tools
+        run: python -m pip install -e . pytest
+      - name: Compile core
+        run: python -m compileall -q huc.py huc_bft.py huc_bft_peer.py huc_federation.py huc_membership.py huc_peer.py huc_replicated.py huc_view.py
+      - name: Run Linux core suite
+        run: python -m pytest -q tests --junitxml=linux-core.xml
+      - name: Run four-institution certificate lifecycle rehearsal
+        run: python -m unittest tests.test_four_institution_pilot -v
+      - name: Run multi-process TLS cluster
+        run: python -m unittest tests.test_bft_process_cluster -v
+      - name: Run synthetic funding sandbox
+        run: python -m validation.run_funding_sandbox --output funding-evidence.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: huc-linux-evidence
+          path: |
+            linux-core.xml
+            funding-evidence.json
+          if-no-files-found: warn
