@@ -77,5 +77,46 @@ class FundingSandboxTests(unittest.TestCase):
         self.assertEqual(evidence["mode"], "SYNTHETIC_NO_EXTERNAL_PROVIDER")
 
 
+    def test_event_payload_and_export_are_detached_from_mutations(self):
+        intent = self.make_intent()
+        original = self.sandbox.evidence()
+        original["events"][0]["payload"]["status"] = "tampered"
+        intent["status"] = "tampered"
+        self.assertTrue(self.sandbox.verify_event_chain())
+        self.assertEqual(self.sandbox.evidence()["events"][0]["payload"]["status"], "created")
+
+    def test_exported_chain_detects_tampering(self):
+        self.make_intent()
+        events = self.sandbox.evidence()["events"]
+        events[0]["payload"]["amount"] = "999.00"
+        self.assertFalse(self.sandbox.verify_event_chain(events))
+
+    def test_refund_idempotency_key_cannot_be_reused_for_another_intent(self):
+        first = self.make_intent()
+        self.sandbox.authorize(first["intent_id"])
+        self.sandbox.capture(first["intent_id"])
+        second = self.sandbox.create_intent(
+            reference_id="HUC-DEMO-CONTRIBUTION-002",
+            amount="10.00",
+            idempotency_key="intent-002",
+        )
+        with self.assertRaisesRegex(ValueError, "different request"):
+            self.sandbox.refund(
+                second["intent_id"], amount="1.00", idempotency_key="refund-shared"
+            )
+        self.sandbox.refund(
+            first["intent_id"], amount="1.00", idempotency_key="refund-shared"
+        )
+
+    def test_non_finite_and_boolean_amounts_are_rejected(self):
+        for amount in (float("nan"), float("inf"), True):
+            with self.subTest(amount=amount):
+                with self.assertRaises(ValueError):
+                    self.sandbox.create_intent(
+                        reference_id="HUC-INVALID-AMOUNT",
+                        amount=amount,
+                        idempotency_key=f"invalid-{str(amount)}",
+                    )
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
