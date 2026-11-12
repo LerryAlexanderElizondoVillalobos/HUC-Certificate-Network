@@ -58,9 +58,16 @@ class InstitutionalAuthorityAPITests(unittest.TestCase):
             cert, key = issue(name, self.ca, self.ca_key)
             self.clients.append((name, cert, key))
         self.ca_file = self.root/"ca.crt"
+        self.crl_file = self.root/"ca.crl"
         self.server_cert_file = self.root/"server.crt"
         self.server_key_file = self.root/"server.key"
         write_pem(self.ca_file, self.ca.public_bytes(serialization.Encoding.PEM))
+        from datetime import datetime, timedelta, timezone
+        now = datetime.now(timezone.utc)
+        crl = (x509.CertificateRevocationListBuilder().issuer_name(self.ca.subject)
+            .last_update(now-timedelta(minutes=1)).next_update(now+timedelta(days=1))
+            .sign(self.ca_key, hashes.SHA256()))
+        write_pem(self.crl_file, crl.public_bytes(serialization.Encoding.PEM))
         write_pem(self.server_cert_file, self.server_cert.public_bytes(serialization.Encoding.PEM))
         write_pem(self.server_key_file, self.server_key.private_bytes(
             serialization.Encoding.PEM, serialization.PrivateFormat.TraditionalOpenSSL,
@@ -71,7 +78,8 @@ class InstitutionalAuthorityAPITests(unittest.TestCase):
         }}), encoding="utf-8")
         self.db = self.root/"authority.sqlite3"
         self.server = build_server(self.db, self.server_cert_file, self.server_key_file,
-                                   self.ca_file, self.registry_file, "127.0.0.1", 0)
+                                   self.ca_file, self.registry_file, "127.0.0.1", 0,
+                                   self.ca_file, self.crl_file, None, "crl")
         self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         self.thread.start()
         self.url = f"https://127.0.0.1:{self.server.server_port}"
@@ -94,6 +102,11 @@ class InstitutionalAuthorityAPITests(unittest.TestCase):
         self.tmp.cleanup()
 
     def request(self, index, path, payload=None):
+        if payload is not None and "authorization" in payload:
+            payload = {**payload,
+                "signer_certificate_pem": self.clients[index][1].public_bytes(
+                    serialization.Encoding.PEM).decode("ascii"),
+                "signer_chain_pem": []}
         data = None if payload is None else json.dumps(payload).encode()
         req = urllib.request.Request(self.url+path, data=data,
             headers={"Content-Type": "application/json"} if data else {})
