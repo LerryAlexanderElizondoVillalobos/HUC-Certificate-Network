@@ -12,10 +12,20 @@ import huc_peer as peer
 import huc_replicated as rsp
 
 
-def free_port():
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.bind(("127.0.0.1", 0))
-        return sock.getsockname()[1]
+def free_ports(count):
+    """Reserve distinct ephemeral ports simultaneously to avoid duplicate allocation."""
+    sockets = []
+    try:
+        ports = []
+        for _ in range(count):
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.bind(("127.0.0.1", 0))
+            sockets.append(sock)
+            ports.append(sock.getsockname()[1])
+        return ports
+    finally:
+        for sock in sockets:
+            sock.close()
 
 
 class BFTPeerNetworkTests(unittest.IsolatedAsyncioTestCase):
@@ -35,7 +45,8 @@ class BFTPeerNetworkTests(unittest.IsolatedAsyncioTestCase):
         for node in self.nodes.values():
             rsp.node_join(node, self.network_path, self.network_pin)
             bft.initialize_node(node)
-        self.ports = {name: free_port() for name in self.nodes}
+        allocated_ports = free_ports(len(self.nodes))
+        self.ports = dict(zip(self.nodes, allocated_ports))
         endpoints = [f"{name}=127.0.0.1:{port}" for name, port in self.ports.items()]
         self.peer_map_path = self.root / "peer-map.json"
         peer_info = peer.create_peer_map(self.network_path, self.network_pin, endpoints, self.peer_map_path)
