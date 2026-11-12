@@ -156,12 +156,15 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e . pytest
           python -m pytest -q tests/test_funding_sandbox.py --junitxml=funding-sandbox-results.xml
+          python -m validation.run_funding_sandbox --output funding-sandbox-evidence.json
       - name: Upload funding sandbox evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: huc-funding-sandbox-${{ matrix.os }}
-          path: funding-sandbox-results.xml
+          path: |
+            funding-sandbox-results.xml
+            funding-sandbox-evidence.json
           if-no-files-found: warn
 
   android-emulator-tests:
