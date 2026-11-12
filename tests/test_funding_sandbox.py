@@ -100,13 +100,13 @@ class FundingSandboxTests(unittest.TestCase):
             amount="10.00",
             idempotency_key="intent-002",
         )
+        self.sandbox.refund(
+            first["intent_id"], amount="1.00", idempotency_key="refund-shared"
+        )
         with self.assertRaisesRegex(ValueError, "different request"):
             self.sandbox.refund(
                 second["intent_id"], amount="1.00", idempotency_key="refund-shared"
             )
-        self.sandbox.refund(
-            first["intent_id"], amount="1.00", idempotency_key="refund-shared"
-        )
 
     def test_non_finite_and_boolean_amounts_are_rejected(self):
         for amount in (float("nan"), float("inf"), True):
