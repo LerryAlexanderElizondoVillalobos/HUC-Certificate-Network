@@ -2,7 +2,7 @@ name: HUC Platform — macOS
 
 on:
   pull_request:
-    branches: [main, validation/huc-0.8.0-multiplatform, architecture/modular-platform-monorepo]
+    branches: [main]
     paths: ['platforms/macos/**', '.github/workflows/platform-macos.yml']
   push:
     branches: [main, validation/huc-0.8.0-multiplatform, architecture/modular-platform-monorepo]
