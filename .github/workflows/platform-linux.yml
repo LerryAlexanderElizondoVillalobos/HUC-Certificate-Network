@@ -2,7 +2,7 @@ name: HUC Platform — Linux
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, validation/huc-0.8.0-multiplatform, architecture/modular-platform-monorepo]
     paths:
       - 'huc*.py'
       - 'tests/**'
@@ -12,7 +12,7 @@ on:
       - 'platforms/linux/**'
       - '.github/workflows/platform-linux.yml'
   push:
-    branches: [main]
+    branches: [main, validation/huc-0.8.0-multiplatform, architecture/modular-platform-monorepo]
     paths:
       - 'huc*.py'
       - 'tests/**'
