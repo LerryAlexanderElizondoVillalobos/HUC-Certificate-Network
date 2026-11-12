@@ -267,6 +267,11 @@ def build_server(database: str | Path, cert_file: str | Path,
     context.minimum_version = ssl.TLSVersion.TLSv1_2
     context.load_cert_chain(str(cert_file), str(key_file))
     context.load_verify_locations(cafile=str(client_ca_file))
+    # mTLS client certificates are also checked against the provisioned CRL.
+    context.load_verify_locations(cafile=str(crl_bundle))
+    if not hasattr(ssl, "VERIFY_CRL_CHECK_CHAIN"):
+        raise RuntimeError("This Python/OpenSSL build cannot enforce full-chain CRL checking")
+    context.verify_flags |= ssl.VERIFY_CRL_CHECK_CHAIN
     context.verify_mode = ssl.CERT_REQUIRED
     server.socket = context.wrap_socket(server.socket, server_side=True)
     server.huc_store = store
