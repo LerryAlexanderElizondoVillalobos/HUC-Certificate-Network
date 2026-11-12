@@ -39,6 +39,8 @@ def validate_certificate_policy(
     """
     if revocation not in {"crl", "ocsp", "both"}:
         raise X509PolicyError("revocation must be crl, ocsp, or both")
+    if not policy_oid:
+        raise X509PolicyError("An institution-approved certificate policy OID is mandatory")
     roots = Path(trust_bundle)
     if not roots.is_file() or not roots.read_bytes().strip():
         raise X509PolicyError("Pinned trust bundle is missing or empty")
@@ -98,7 +100,7 @@ def validate_certificate_policy(
             if not good:
                 raise X509PolicyError("OCSP did not confirm good status: " + "; ".join(errors))
             ocsp_status = "GOOD"
-        return {"chain_valid": True, "policy_checked": bool(policy_oid),
+        return {"chain_valid": True, "policy_checked": True,
                 "revocation_status": "GOOD" if revocation in {"crl", "both"} else ocsp_status,
                 "ocsp_status": ocsp_status, "revocation_mode": revocation,
                 "production_ready": True}
