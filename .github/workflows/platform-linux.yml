@@ -48,6 +48,8 @@ jobs:
         run: python -m pytest -q tests --junitxml=linux-core.xml
       - name: Run Costa Rica external X.509 adapter tests
         run: python -m unittest tests.test_huc_x509_external -v
+      - name: Run standalone mode without nodes and concurrent double-spend tests
+        run: python -m unittest tests.test_huc_standalone_mode -v
       - name: Run four-institution certificate lifecycle rehearsal
         run: python -m unittest tests.test_four_institution_pilot -v
       - name: Run multi-process TLS cluster
