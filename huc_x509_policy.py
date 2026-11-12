@@ -103,4 +103,5 @@ def validate_certificate_policy(
         return {"chain_valid": True, "policy_checked": True,
                 "revocation_status": "GOOD" if revocation in {"crl", "both"} else ocsp_status,
                 "ocsp_status": ocsp_status, "revocation_mode": revocation,
-                "production_ready": True}
+                "production_ready": False,
+                "production_note": "Pilot verifier; OCSP currently checks the leaf certificate only. Complete chain-wide OCSP and institutional policy review are required before production."}
