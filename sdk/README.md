@@ -20,7 +20,7 @@ The SDK's own build report records 19 passing Python unit/integration tests. Git
 
 ## Android status
 
-The Kotlin/Gradle project is included. The original 0.8.0 build report records that it was not compiled in its development environment because Android SDK/Gradle were unavailable. A successful Android CI build and physical-device Keystore testing remain release gates.
+The Kotlin/Gradle project is included. The original 0.8.0 build report records that it was not compiled in its development environment because Android SDK/Gradle were unavailable. Android compilation is not yet part of the passing CI gate; Gradle build and physical-device Keystore testing remain release gates.
 
 ## Trust model
 
