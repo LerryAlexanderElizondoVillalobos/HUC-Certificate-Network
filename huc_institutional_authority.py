@@ -90,6 +90,13 @@ class AuthorityStore:
             raise RuntimeError("Evidence chain is corrupt; authority startup refused")
         sequence = evidence["event_count"]
         head_hash = evidence["event_head_hash"]
+        if not self.anchor_path.exists():
+            with self._connect() as db:
+                consumed_count = db.execute("SELECT COUNT(*) FROM consumed").fetchone()[0]
+            if sequence != 0 or consumed_count != 0:
+                raise RuntimeError("Rollback anchor missing for non-empty authority; startup refused")
+            self._atomic_write_anchor(0, ZERO)
+            return
         if self.anchor_path.exists():
             anchor = json.loads(self.anchor_path.read_text(encoding="utf-8"))
             if anchor.get("schema") != "HUC-ROLLBACK-ANCHOR-1":
@@ -143,7 +150,12 @@ class AuthorityStore:
             except Exception:
                 db.execute("ROLLBACK")
                 raise
-        self._atomic_write_anchor(seq, event_hash)
+        # Read the committed head back before anchoring. This prevents concurrent
+        # request threads from writing an older sequence after a newer one.
+        current = self.evidence()
+        if not current["event_chain_valid"]:
+            raise RuntimeError("Committed evidence chain failed verification")
+        self._atomic_write_anchor(current["event_count"], current["event_head_hash"])
         return {"consumed": True, "single_use_enforced": True,
                 "institution_id": institution_id, "outpoint": outpoint,
                 "txid": txid, "event_hash": event_hash}
